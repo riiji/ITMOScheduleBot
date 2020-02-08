@@ -11,13 +11,13 @@ namespace ITMOSchedule.Bot
 {
     public class VkInputter : IInput<LongPollHistoryResponse>
     {
-        private readonly VkApi _api;
+        private readonly VkApi _vkApi;
 
         private readonly LongPollServerResponse _response;
 
-        public VkInputter(VkApi api)
+        public VkInputter(VkApi vkApi)
         {
-            throw new NotImplementedException();
+            _vkApi = vkApi;
         }
 
         public LongPollHistoryResponse GetData()
