@@ -1,33 +1,43 @@
-﻿using ITMOSchedule.Bot.Exceptions;
+﻿using System;
+using ITMOSchedule.Bot.Exceptions;
 using ITMOSchedule.Bot.Interfaces;
+using Telegram.Bot;
 using VkNet;
 using VkNet.Model;
+using MihaZupan;
 
 namespace ITMOSchedule.Bot
 {
-    public class Logger : ILogger
+    public class VkLogger : ILogger
     {
         private readonly VkApi _vkApi;
 
-        public Logger(VkApi vkApi)
+        public VkLogger(VkApi vkApi)
         {
-            _vkApi = vkApi;
+            throw new NotImplementedException();
         }
 
         public void Login()
         {
-            _vkApi.Authorize(new ApiAuthParams
-            {
-                AccessToken = Utilities.BotConfig.AccessKey
-            });
+            throw new NotImplementedException();
+        }
+        
+        public void Logout()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class TelegramLogger : ILogger
+    {
+        public void Login()
+        {
+
         }
 
         public void Logout()
         {
-            if(_vkApi == null)
-                throw new BotValidException("Vk api not founded");
-
-            _vkApi.LogOut();
+            throw new System.NotImplementedException();
         }
     }
 }
