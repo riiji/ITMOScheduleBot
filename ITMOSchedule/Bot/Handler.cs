@@ -1,4 +1,5 @@
-﻿using ITMOSchedule.Bot.Interfaces;
+﻿using System;
+using ITMOSchedule.Bot.Interfaces;
 using VkNet;
 using VkNet.Model;
 
@@ -10,12 +11,12 @@ namespace ITMOSchedule.Bot
 
         public Handler(VkApi vkApi)
         {
-            _vkApi = vkApi;
+            throw new NotImplementedException();
         }
 
         public string HandleData(LongPollHistoryResponse data)
         {
-            return null;
+            throw new NotImplementedException();
         }
     }
 }

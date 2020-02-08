@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using ITMOSchedule.Bot.Interfaces;
 using ItmoScheduleApiWrapper;
 using ItmoScheduleApiWrapper.Models;
@@ -16,22 +17,12 @@ namespace ITMOSchedule.Bot
 
         public Inputter(VkApi api)
         {
-            _api = api;
-
-            _response = _api.Groups.GetLongPollServer(Utilities.BotConfig.GroupId);
+            throw new NotImplementedException();
         }
 
         public LongPollHistoryResponse GetData()
         {
-            var response = _api.Messages.GetLongPollHistory(new MessagesGetLongPollHistoryParams
-            {
-                Ts = ulong.Parse(_response.Ts),
-                Pts = _response.Pts,
-            });
-
-            _response.Pts = response.NewPts;
-
-            return response;
+            throw new NotImplementedException();
         }
     }
 }

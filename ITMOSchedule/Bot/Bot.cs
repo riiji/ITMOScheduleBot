@@ -17,13 +17,15 @@ namespace ITMOSchedule.Bot
         private readonly IInput<TI> _inputter;
         private readonly IHandler<TI, TO> _handler;
         private readonly IPrinter<TO> _printer;
+        private readonly ISaver<TS> _saver;
 
-        public Bot(IPrinter<TO> printer, IHandler<TI, TO> handler, IInput<TI> inputter, ILogger logger)
+        public Bot(IPrinter<TO> printer, IHandler<TI, TO> handler, IInput<TI> inputter, ILogger logger, ISaver<TS> saver)
         {
             _printer = printer;
             _handler = handler;
             _inputter = inputter;
             _logger = logger;
+            _saver = saver;
         }
 
         public bool IsValid
