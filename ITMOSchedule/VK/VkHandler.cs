@@ -3,15 +3,15 @@ using ITMOSchedule.Bot.Interfaces;
 using VkNet;
 using VkNet.Model;
 
-namespace ITMOSchedule.Bot
+namespace ITMOSchedule.Vk
 {
-    public class VkHandler : IHandler<LongPollHistoryResponse, string>
-    {
+    public class VkHandler 
+    { 
         private readonly VkApi _vkApi;
 
         public VkHandler(VkApi vkApi)
         {
-            throw new NotImplementedException();
+            _vkApi = vkApi;
         }
 
         public string HandleData(LongPollHistoryResponse data)
