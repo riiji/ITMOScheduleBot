@@ -18,19 +18,8 @@ namespace ITMOSchedule
     {
         static void Main(string[] args)
         {
-            var vkApi = new VkApi();
+            
 
-            var logger = new Logger(vkApi);
-
-            logger.Login();
-
-            var inputter = new Inputter(vkApi);
-            var handler = new Handler(vkApi);
-            var printer = new Printer();
-
-            var bot = new Bot<LongPollHistoryResponse, string, string>(printer, handler, inputter, logger);
-
-            bot.Process();
         }
     }
 }
