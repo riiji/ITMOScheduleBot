@@ -8,11 +8,11 @@ using MihaZupan;
 
 namespace ITMOSchedule.Bot
 {
-    public class VkLogger : ILogger
+    public class VKLogger : ILogger
     {
         private readonly VkApi _vkApi;
 
-        public VkLogger(VkApi vkApi)
+        public VKLogger(VkApi vkApi)
         {
             throw new NotImplementedException();
         }
