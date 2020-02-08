@@ -5,11 +5,11 @@ using VkNet.Model;
 
 namespace ITMOSchedule.Bot
 {
-    public class Handler : IHandler<LongPollHistoryResponse, string>
+    public class VkHandler : IHandler<LongPollHistoryResponse, string>
     {
         private readonly VkApi _vkApi;
 
-        public Handler(VkApi vkApi)
+        public VkHandler(VkApi vkApi)
         {
             throw new NotImplementedException();
         }

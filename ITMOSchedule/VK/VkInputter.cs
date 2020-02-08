@@ -9,13 +9,13 @@ using VkNet.Model.RequestParams;
 
 namespace ITMOSchedule.Bot
 {
-    public class Inputter : IInput<LongPollHistoryResponse>
+    public class VkInputter : IInput<LongPollHistoryResponse>
     {
         private readonly VkApi _api;
 
         private readonly LongPollServerResponse _response;
 
-        public Inputter(VkApi api)
+        public VkInputter(VkApi api)
         {
             throw new NotImplementedException();
         }

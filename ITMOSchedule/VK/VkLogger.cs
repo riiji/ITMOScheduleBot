@@ -27,17 +27,4 @@ namespace ITMOSchedule.Bot
             throw new NotImplementedException();
         }
     }
-
-    public class TelegramLogger : ILogger
-    {
-        public void Login()
-        {
-
-        }
-
-        public void Logout()
-        {
-            throw new System.NotImplementedException();
-        }
-    }
 }
