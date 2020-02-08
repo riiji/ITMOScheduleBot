@@ -1,30 +1,28 @@
 ﻿using System;
-using ITMOSchedule.Bot.Exceptions;
-using ITMOSchedule.Bot.Interfaces;
-using Telegram.Bot;
+using VkLibrary.Core;
+using VkLibrary.Core.Auth;
+using VkLibrary.Core.Services;
 using VkNet;
-using VkNet.Model;
-using MihaZupan;
 
-namespace ITMOSchedule.Bot
+namespace ITMOSchedule.Vk
 {
-    public class VKLogger : ILogger
+    public class VkLogger
     {
-        private readonly VkApi _vkApi;
+        private Vkontakte _vkApi;
 
-        public VKLogger(VkApi vkApi)
+        public VkLogger(Vkontakte vkApi)
         {
-            throw new NotImplementedException();
+            _vkApi = vkApi;
         }
 
         public void Login()
         {
-            throw new NotImplementedException();
-        }
-        
-        public void Logout()
-        {
-            throw new NotImplementedException();
+            AccessToken accessToken = AccessToken.FromString(VkSettings.Key);
+
+            _vkApi = new Vkontakte(VkSettings.AppId, VkSettings.AppSecret)
+            {
+                AccessToken = accessToken
+            };
         }
     }
 }

@@ -1,22 +1,13 @@
 ﻿using System;
-using HtmlAgilityPack;
 using ITMOSchedule.Bot.Interfaces;
 
-namespace ITMOSchedule.Bot
+namespace ITMOSchedule.Vk
 {
-    public class VkPrinter : IPrinter<string>
+    public class VkPrinter 
     {
         public void PrintData(string data)
         {
             throw new NotImplementedException();
-        }
-    }
-
-    public class ConsolePrinter : IPrinter<string>
-    {
-        public void PrintData(string data)
-        {
-            Console.WriteLine(data);
         }
     }
 }
