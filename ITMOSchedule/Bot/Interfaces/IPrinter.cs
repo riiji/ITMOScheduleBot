@@ -1,7 +1,7 @@
 ﻿namespace ITMOSchedule.Bot.Interfaces
 {
-    public interface IPrinter<in TO>
+    public interface IPrinter
     {
-        void PrintData(TO data);
+        void PrintData(string data);
     }
 }

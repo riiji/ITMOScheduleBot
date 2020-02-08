@@ -5,27 +5,19 @@ using ITMOSchedule.Bot.Interfaces;
 
 namespace ITMOSchedule.Bot
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="TI">Bot Input Type</typeparam>
-    /// <typeparam name="TO">Bot Output Type</typeparam>
-    /// <typeparam name="TS">Bot Saver Type</typeparam>
-    public class Bot<TI, TO, TS> : IBot<TI, TO>, ISaver<TS>
+    public class Bot<T> : IBot<T>
     {
         private readonly ILogger _logger;
-        private readonly IInput<TI> _inputter;
-        private readonly IHandler<TI, TO> _handler;
-        private readonly IPrinter<TO> _printer;
-        private readonly ISaver<TS> _saver;
+        private readonly IInput<T> _inputter;
+        private readonly IHandler<T> _handler;
+        private readonly IPrinter _printer;
 
-        public Bot(IPrinter<TO> printer, IHandler<TI, TO> handler, IInput<TI> inputter, ILogger logger, ISaver<TS> saver)
+        public Bot(ILogger logger, IInput<T> inputter, IHandler<T> handler, IPrinter printer)
         {
-            _printer = printer;
-            _handler = handler;
-            _inputter = inputter;
             _logger = logger;
-            _saver = saver;
+            _inputter = inputter;
+            _handler = handler;
+            _printer = printer;
         }
 
         public bool IsValid
@@ -45,24 +37,19 @@ namespace ITMOSchedule.Bot
             }
         }
 
-        public TI GetData()
+        public T GetData()
         {
             return _inputter.GetData();
         }
 
-        public TO HandleData(TI data)
+        public string HandleData(T data)
         {
             return _handler.HandleData(data);
         }
 
-        public void PrintData(TO data)
+        public void PrintData(string data)
         {
             _printer.PrintData(data);
-        }
-
-        public void SaveData(TS data)
-        {
-            throw new NotImplementedException();
         }
 
         public void Process()
@@ -78,11 +65,6 @@ namespace ITMOSchedule.Bot
         public void Login()
         {
             _logger.Login();
-        }
-
-        public void Logout()
-        {
-            _logger.Logout();
         }
     }
 }

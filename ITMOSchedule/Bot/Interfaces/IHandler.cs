@@ -1,7 +1,7 @@
 ﻿namespace ITMOSchedule.Bot.Interfaces
 {
-    public interface IHandler<in TI, out TO>
+    public interface IHandler<in TI>
     {
-        public TO HandleData(TI data);
+        public string HandleData(TI data);
     }
 }

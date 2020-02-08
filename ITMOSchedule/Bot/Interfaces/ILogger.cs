@@ -3,7 +3,5 @@
     public interface ILogger
     {
         void Login();
-
-        void Logout();
     }
 }

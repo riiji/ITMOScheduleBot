@@ -1,11 +1,7 @@
 ﻿namespace ITMOSchedule.Bot.Interfaces
 {
-    public interface IBot<TI, TO> : ILogger, IInput<TI>, IValidator, IHandler<TI,TO>, IPrinter<TO>
+    public interface IBot<T> : ILogger, IInput<T>, IValidator, IHandler<T>, IPrinter
     {
-        TI InputData => GetData();
-
-        TO OutputData => HandleData(InputData);
-
         void Process();
     }
 }
