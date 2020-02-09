@@ -1,22 +1,22 @@
 ﻿using System;
 using ITMOSchedule.Bot.Interfaces;
+using ITMOSchedule.Telegram;
 using Telegram.Bot;
-using MihaZupan;
 
 namespace ITMOSchedule.Bot
 {
     public class TelegramLogger : ILogger
     {
-        private readonly TelegramBotClient _TelegramApi;
+        private readonly TelegramBotClient _telegramApi;
 
-        public TelegramLogger(TelegramBotClient _TelegramApi)
+        public TelegramLogger(TelegramBotClient telegramApi)
         {
-            throw new NotImplementedException();
+            _telegramApi = telegramApi;
         }
 
         public void Login()
         {
-            throw new NotImplementedException();
+            var botClient = new TelegramBotClient(TelegramSettings.Key, TelegramSettings.Proxy);
         }
 
         public void Logout()
