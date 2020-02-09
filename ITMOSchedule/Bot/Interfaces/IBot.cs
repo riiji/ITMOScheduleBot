@@ -1,6 +1,6 @@
 ﻿namespace ITMOSchedule.Bot.Interfaces
 {
-    public interface IBot<T> : ILogger, IInput<T>, IValidator, IHandler<T>, IPrinter
+    public interface IBot<T> : IAuthorize, IInput<T>, IHandler<T>, IPrinter
     {
         void Process();
     }

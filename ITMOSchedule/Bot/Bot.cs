@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using ITMOSchedule.Bot.Exceptions;
 using ITMOSchedule.Bot.Interfaces;
 
@@ -7,34 +6,16 @@ namespace ITMOSchedule.Bot
 {
     public class Bot<T> : IBot<T>
     {
-        private readonly ILogger _logger;
+        private readonly IAuthorize _authorizer;
         private readonly IInput<T> _inputter;
         private readonly IHandler<T> _handler;
         private readonly IPrinter _printer;
 
-        public Bot(ILogger logger, IInput<T> inputter, IHandler<T> handler, IPrinter printer)
+        public Bot(IAuthorize authorizer, IInput<T> inputter, IPrinter printer)
         {
-            _logger = logger;
-            _inputter = inputter;
-            _handler = handler;
-            _printer = printer;
-        }
-
-        public bool IsValid
-        {
-            get
-            {
-                if(_printer == null)
-                    throw new BotValidException("Printer not founded");
-
-                if(_handler == null)
-                    throw new BotValidException("Handler not founded");
-
-                if(_inputter == null)
-                    throw new BotValidException("Inputter not founded");
-
-                return true;
-            }
+            _authorizer = authorizer ?? throw new BotValidException("Authorizer not founded");
+            _inputter = inputter ?? throw new BotValidException("Inputter not founded");
+            _printer = printer ?? throw new BotValidException("Printer not founded");
         }
 
         public T GetData()
@@ -54,17 +35,12 @@ namespace ITMOSchedule.Bot
 
         public void Process()
         {
-            if(!IsValid)
-                throw new BotValidException();
-
-            var rawData = GetData();
-            var data = HandleData(rawData);
-            PrintData(data);
+            throw new NotImplementedException();
         }
 
         public void Login()
         {
-            _logger.Login();
+            _authorizer.Login();
         }
     }
 }

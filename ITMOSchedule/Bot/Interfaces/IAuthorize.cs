@@ -1,6 +1,6 @@
 ﻿namespace ITMOSchedule.Bot.Interfaces
 {
-    public interface ILogger
+    public interface IAuthorize
     {
         void Login();
     }

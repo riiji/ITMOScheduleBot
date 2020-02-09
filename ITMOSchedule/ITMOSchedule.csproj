@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Bot\Utilities\" />
     <Folder Include="Telegram\" />
+    <Folder Include="Vk\" />
   </ItemGroup>
 
 </Project>

@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using ITMOSchedule.Bot;
-using ITMOSchedule.Bot.Interfaces;
-using ItmoScheduleApiWrapper;
-using ItmoScheduleApiWrapper.Filters;
-using ItmoScheduleApiWrapper.Helpers;
-using ItmoScheduleApiWrapper.Models;
-using ItmoScheduleApiWrapper.Types;
-using VkNet;
-using VkNet.Model;
-using VkNet.Utils;
+﻿using ITMOSchedule.Vk;
 
 namespace ITMOSchedule
 {
@@ -18,7 +6,8 @@ namespace ITMOSchedule
     {
         static void Main(string[] args)
         {
-            
+            VkAuthorize auth = new VkAuthorize();
+            auth.Login().Build();
 
         }
     }

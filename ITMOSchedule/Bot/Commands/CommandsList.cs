@@ -1,23 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ITMOSchedule.Bot.Exceptions;
-using ITMOSchedule.Commands;
-using ITMOSchedule.Common;
 
 namespace ITMOSchedule.Bot.Commands
 {
     public class CommandsList
     {
-        private readonly Dictionary<string, ICommand> Commands = new Dictionary<string, ICommand>();
+        private static readonly Dictionary<string, IBotCommand> Commands = new Dictionary<string, IBotCommand>();
 
-        public void AddCommand(ICommand command)
+        public static void AddCommand(IBotCommand command)
         {
             Commands.Add(command.CommandName, command);
         }
 
-        public ICommand GetCommand(string commandName)
+        public static IBotCommand GetCommand(string commandName)
         {
-            Commands.TryGetValue(commandName, out ICommand command);
+            Commands.TryGetValue(commandName, out IBotCommand command);
 
             if(command == null)
                 throw new BotValidException("Command not founded!");

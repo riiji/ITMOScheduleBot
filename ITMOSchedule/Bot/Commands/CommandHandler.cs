@@ -1,6 +1,4 @@
-﻿using ITMOSchedule.Common;
-
-namespace ITMOSchedule.Bot.Commands
+﻿namespace ITMOSchedule.Bot.Commands
 {
     public class CommandHandler
     {
