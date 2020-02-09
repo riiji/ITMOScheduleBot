@@ -1,13 +1,13 @@
-﻿using ITMOSchedule.Bot.Exceptions;
-using ITMOSchedule.Commands;
+﻿using ITMOSchedule.Common;
 
 namespace ITMOSchedule.Bot.Commands
 {
     public class CommandHandler
     {
-        public void ExecuteCommand(string commandName, string[] args)
+        public void ExecuteCommand(string commandName, CommandArgumentContainer args)
         {
-            var command = CommandsList.GetCommand(commandName);
+            var commandsList = new CommandsList();
+            var command = commandsList.GetCommand(commandName);
 
             command.Execute(args);
         }

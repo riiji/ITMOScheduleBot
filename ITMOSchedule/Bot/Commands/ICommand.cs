@@ -1,13 +1,15 @@
-﻿using VkNet.Model.RequestParams.Groups;
+﻿using ITMOSchedule.Common;
 
 namespace ITMOSchedule.Commands
 {
+    //TODO: rename coz of collision with System.Input.ICommand
     public interface ICommand
     {
         string CommandName { get; }
 
         string Description { get; }
 
-        void Execute(string[] args);
+        bool CanExecute(CommandArgumentContainer args);
+        CommandExecuteResult Execute(CommandArgumentContainer args);
     }
 }
