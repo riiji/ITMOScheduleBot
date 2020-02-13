@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using ITMOSchedule.Bot;
-using ITMOSchedule.Bot.Interfaces;
+﻿using System.Threading.Tasks;
 using ITMOSchedule.VK;
-using ItmoScheduleApiWrapper;
-using ItmoScheduleApiWrapper.Filters;
-using ItmoScheduleApiWrapper.Helpers;
-using ItmoScheduleApiWrapper.Models;
-using ItmoScheduleApiWrapper.Types;
-using VkNet;
-using VkNet.Model;
-using VkNet.Utils;
 
 namespace ITMOSchedule
 {
@@ -19,8 +7,9 @@ namespace ITMOSchedule
     {
         public async Task MainAsync()
         {
-            VkBot bot = new VkBot();
-            bot.Login();
+            var bot = new Bot.Bot(new VkBotApiProvider(new VkAuthorizer()));
+
+            bot.Process();
 
             await Task.Delay(-1);
         }

@@ -9,17 +9,11 @@
     <PackageReference Include="HttpToSocks5Proxy" Version="1.4.0" />
     <PackageReference Include="ItmoScheduleApiWrapper" Version="1.0.1" />
     <PackageReference Include="Telegram.Bot" Version="15.3.0" />
-    <PackageReference Include="VkApi.Wrapper" Version="1.0.0" />
-    <PackageReference Include="VkNet" Version="1.49.0" />
+    <PackageReference Include="VkApi.Wrapper" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Telegram\" />
-    <Folder Include="Vk\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Users\79512\Desktop\VkLibrary\VkLibrary-feat-bot-longpoll\VkLibrary.Core\VkApi.Wrapper.csproj" />
   </ItemGroup>
 
 </Project>

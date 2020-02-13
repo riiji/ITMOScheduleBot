@@ -2,6 +2,6 @@
 {
     public interface IAuthorize
     {
-        void Login();
+        void Auth();
     }
 }

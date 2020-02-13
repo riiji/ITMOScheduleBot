@@ -4,19 +4,21 @@ using System.Linq;
 
 namespace ITMOSchedule.Common
 {
-    //TODO: add sender info etc.
     public class CommandArgumentContainer
     {
+        public int GroupId { get; set; }
+
         public List<String> Arguments { get; set; }
 
-        public CommandArgumentContainer()
+        public CommandArgumentContainer(int groupId, List<string> arguments)
         {
-            
+            GroupId = groupId;
+            Arguments = arguments;
         }
 
-        public CommandArgumentContainer(params string[] arguments)
+        public CommandArgumentContainer(List<string> arguments)
         {
-            Arguments = arguments.ToList();
+            Arguments = arguments;
         }
     }
 }

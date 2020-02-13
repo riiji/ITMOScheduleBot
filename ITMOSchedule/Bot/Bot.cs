@@ -1,46 +1,43 @@
-﻿using System;
+﻿using System.Linq;
+using ITMOSchedule.Bot.Commands;
 using ITMOSchedule.Bot.Exceptions;
 using ITMOSchedule.Bot.Interfaces;
+using ITMOSchedule.Common;
 
 namespace ITMOSchedule.Bot
 {
-    public class Bot<T> : IBot<T>
+    public class Bot
     {
-        private readonly IAuthorize _authorizer;
-        private readonly IInput<T> _inputter;
-        private readonly IHandler<T> _handler;
-        private readonly IPrinter _printer;
+        private CommandHandler _commandHandler;
+        private readonly IBotApiProvider _provider;
 
-        public Bot(IAuthorize authorizer, IInput<T> inputter, IPrinter printer)
+        public Bot(IBotApiProvider apiProvider)
         {
-            _authorizer = authorizer ?? throw new BotValidException("Authorizer not founded");
-            _inputter = inputter ?? throw new BotValidException("Inputter not founded");
-            _printer = printer ?? throw new BotValidException("Printer not founded");
-        }
-
-        public T GetData()
-        {
-            return _inputter.GetData();
-        }
-
-        public string HandleData(T data)
-        {
-            return _handler.HandleData(data);
-        }
-
-        public void PrintData(string data)
-        {
-            _printer.PrintData(data);
+            _provider = apiProvider ?? throw new BotValidException("Api provider not founded");
         }
 
         public void Process()
         {
-            throw new NotImplementedException();
+            _commandHandler = new CommandHandler(new CommandsList(), _provider);
+
+            _provider.OnMessage += ApiProviderOnMessage;
         }
 
-        public void Login()
+        private void ApiProviderOnMessage(object sender, BotEventArgs e)
         {
-            _authorizer.Login();
+            CommandContainer commandWithArgs = Utilities.ParseCommand(e.Text).Result;
+
+            if (!_commandHandler.IsCommandCorrect(commandWithArgs))
+            {
+                // TODO: Logger (user is so stupid to write correct command)
+            }
+
+            var commandExecuteTask = _commandHandler.ExecuteCommand(commandWithArgs.Name, new CommandArgumentContainer(e.GroupId, commandWithArgs.Args.ToList()));
+
+            if (commandExecuteTask.IsFaulted)
+            {
+                // TODO: Logger (coder is so stupid to write correct code)
+            }
         }
     }
 }
