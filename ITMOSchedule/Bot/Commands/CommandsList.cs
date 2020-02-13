@@ -1,19 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ITMOSchedule.Bot.Exceptions;
+using ITMOSchedule.Commands;
+using ITMOSchedule.Common;
 
 namespace ITMOSchedule.Bot.Commands
 {
     public class CommandsList
     {
-        private static readonly Dictionary<string, IBotCommand> Commands = new Dictionary<string, IBotCommand>();
+        private readonly Dictionary<string, IBotCommand> Commands = new Dictionary<string, IBotCommand>();
 
-        public static void AddCommand(IBotCommand command)
+
+
+        public CommandsList()
+        {
+            AddCommand(new PingCommand());
+        }
+
+        public void AddCommand(IBotCommand command)
         {
             Commands.Add(command.CommandName, command);
         }
 
-        public static IBotCommand GetCommand(string commandName)
+        public IBotCommand GetCommand(string commandName)
         {
             Commands.TryGetValue(commandName, out IBotCommand command);
 
@@ -21,6 +31,11 @@ namespace ITMOSchedule.Bot.Commands
                 throw new BotValidException("Command not founded!");
 
             return command;
+        }
+
+        public bool IsCommandExisted(string commandName)
+        {
+            return Commands.ContainsKey(commandName);
         }
 
         public List<CommandExecuteResult> ExecuteAllAvailable(CommandArgumentContainer args)

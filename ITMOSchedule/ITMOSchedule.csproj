@@ -18,4 +18,8 @@
     <Folder Include="Vk\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Users\79512\Desktop\VkLibrary\VkLibrary-feat-bot-longpoll\VkLibrary.Core\VkApi.Wrapper.csproj" />
+  </ItemGroup>
+
 </Project>

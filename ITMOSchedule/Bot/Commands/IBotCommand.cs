@@ -1,11 +1,15 @@
-﻿namespace ITMOSchedule.Bot.Commands
+﻿using ITMOSchedule.Common;
+
+namespace ITMOSchedule.Commands
 {
+    //TODO: rename coz of collision with System.Input.ICommand
     public interface IBotCommand
     {
         string CommandName { get; }
 
         string Description { get; }
 
-        void Execute(string[] args);
+        bool CanExecute(CommandArgumentContainer args);
+        CommandExecuteResult Execute(CommandArgumentContainer args);
     }
 }
