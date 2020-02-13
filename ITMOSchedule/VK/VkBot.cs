@@ -6,9 +6,9 @@ using ITMOSchedule.Bot.Commands;
 using ITMOSchedule.Bot.Exceptions;
 using ITMOSchedule.Commands;
 using ITMOSchedule.Common;
-using VkLibrary.Core;
-using VkLibrary.Core.Auth;
-using VkLibrary.Core.Objects;
+using VkApi.Wrapper;
+using VkApi.Wrapper.Auth;
+using VkApi.Wrapper.Types.Messages;
 
 namespace ITMOSchedule.VK
 {
@@ -42,14 +42,13 @@ namespace ITMOSchedule.VK
             // TODO: Logger
             if (taskResult.IsFaulted)
                 return;
-
         }
 
         private Task CommandController(string text)
         {
             var splitted = text.Split();
             var command = splitted.FirstOrDefault();
-            
+
             // skip command
             var args = splitted.Skip(1).ToArray();
 
