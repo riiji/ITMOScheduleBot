@@ -5,7 +5,7 @@ using Telegram.Bot;
 
 namespace ITMOSchedule.Bot
 {
-    public class TelegramLogger : ILogger
+    public class TelegramLogger
     {
         private readonly TelegramBotClient _telegramApi;
 
