@@ -348,3 +348,7 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+ITMOSchedule/Telegram/TelegramSettings.cs
+
+ITMOSchedule/VK/VkSettings.cs
