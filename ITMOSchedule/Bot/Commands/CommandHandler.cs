@@ -22,8 +22,5 @@ namespace ITMOSchedule.Bot.Commands
 
             command.Execute(args);
         }
-
-
-
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ITMOSchedule.Bot.Commands.List;
 using ITMOSchedule.Bot.Exceptions;
 using ITMOSchedule.Commands;
 using ITMOSchedule.Common;
@@ -10,8 +11,6 @@ namespace ITMOSchedule.Bot.Commands
     public class CommandsList
     {
         private readonly Dictionary<string, IBotCommand> Commands = new Dictionary<string, IBotCommand>();
-
-
 
         public CommandsList()
         {
