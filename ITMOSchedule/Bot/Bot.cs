@@ -7,6 +7,7 @@ using ItmoScheduleApiWrapper;
 
 namespace ITMOSchedule.Bot
 {
+    //TODO:; dispose
     public class Bot
     {
         private CommandHandler _commandHandler;

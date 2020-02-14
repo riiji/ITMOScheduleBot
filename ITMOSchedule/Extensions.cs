@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 namespace ITMOSchedule
 {
+    //TODO: move to folder
     public static class Extensions
     {
         public static void WaitSafe(this Task task)

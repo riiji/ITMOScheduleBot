@@ -33,6 +33,7 @@ namespace ITMOSchedule.Bot.Commands
 
         public Task RegisterCommands()
         {
+            //TODO: move out from this class
             _commands.AddCommand(new PingCommand(_botProvider));
             _commands.AddCommand(new GetGroupScheduleCommand(_botProvider, _itmoProvider));
             

@@ -10,31 +10,29 @@ namespace ITMOSchedule.Bot.Commands
 {
     public class CommandsList
     {
-        private readonly Dictionary<string, IBotCommand> Commands = new Dictionary<string, IBotCommand>();
+        private readonly Dictionary<string, IBotCommand> _commands = new Dictionary<string, IBotCommand>();
 
         public void AddCommand(IBotCommand command)
         {
-            Commands.Add(command.CommandName, command);
+            _commands.Add(command.CommandName, command);
         }
 
         public IBotCommand GetCommand(string commandName)
         {
-            Commands.TryGetValue(commandName, out IBotCommand command);
+            if(_commands.TryGetValue(commandName, out IBotCommand command))
+                return command;
 
-            if(command == null)
-                throw new BotValidException("Command not founded!");
-
-            return command;
+            throw new BotValidException("Command not founded!");
         }
 
         public bool IsCommandExisted(string commandName)
         {
-            return Commands.ContainsKey(commandName);
+            return _commands.ContainsKey(commandName);
         }
 
         public List<CommandExecuteResult> ExecuteAllAvailable(CommandArgumentContainer args)
         {
-            return Commands.Values
+            return _commands.Values
                 .Where(command => command.CanExecute(args))
                 .Select(command => command.Execute(args))
                 .ToList();
@@ -42,7 +40,7 @@ namespace ITMOSchedule.Bot.Commands
 
         public CommandExecuteResult TryExecuteFirstAvailable(CommandArgumentContainer args)
         {
-            return Commands.Values
+            return _commands.Values
                 .Where(command => command.CanExecute(args))
                 .Select(command => command.Execute(args))
                 .FirstOrDefault();

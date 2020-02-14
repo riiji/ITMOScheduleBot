@@ -22,6 +22,8 @@ namespace ITMOSchedule.Bot.Commands.List
 
         public string CommandName { get; } = "GetGroupSchedule";
         public string Description { get; } = "Get a group schedule by group number";
+
+        //TODO: get rid of execution
         public bool CanExecute(CommandArgumentContainer args)
         {
             if (_botProvider == null || _itmoProvider == null)
@@ -38,6 +40,7 @@ namespace ITMOSchedule.Bot.Commands.List
             return task.IsCompletedSuccessfully;
         }
 
+        //TODO: Lesha says "Gavno, peredelyvai"
         public CommandExecuteResult Execute(CommandArgumentContainer args)
         {
             if(!CanExecute(args))
@@ -47,10 +50,11 @@ namespace ITMOSchedule.Bot.Commands.List
 
             var lessonList = _itmoProvider.ScheduleApi.GetGroupSchedule(groupNumber).Result.Schedule.GetTodaySchedule(DateConvertorService.FirstWeekEven);
 
-            string result = lessonList.Aggregate("", (current, lesson) => current + (lesson.StartTime + " " + lesson.SubjectTitle + "\n"));
+            string result = string.Join(Environment.NewLine, lessonList.Select(lesson => lesson.StartTime + " " + lesson.SubjectTitle));
+            //string result = lessonList.Aggregate("", (current, lesson) => current + (lesson.StartTime + " " + lesson.SubjectTitle + Environment.NewLine));
 
             if (result == string.Empty)
-                result = "Ничего нет";
+                result = "There is nothing here";
 
             _botProvider.WriteMessage(args.GroupId, result);  
 

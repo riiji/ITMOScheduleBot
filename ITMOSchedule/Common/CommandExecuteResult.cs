@@ -6,9 +6,9 @@ namespace ITMOSchedule.Common
     {
         public CommandExecuteResult(Boolean isSuccess)
         {
-            this.isSuccess = isSuccess;
+            IsSuccess = isSuccess;
         }
 
-        public bool isSuccess { get; }
+        public bool IsSuccess { get; }
     }
 }
