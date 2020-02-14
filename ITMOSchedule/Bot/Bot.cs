@@ -3,36 +3,40 @@ using ITMOSchedule.Bot.Commands;
 using ITMOSchedule.Bot.Exceptions;
 using ITMOSchedule.Bot.Interfaces;
 using ITMOSchedule.Common;
+using ItmoScheduleApiWrapper;
 
 namespace ITMOSchedule.Bot
 {
     public class Bot
     {
         private CommandHandler _commandHandler;
-        private readonly IBotApiProvider _provider;
+        private readonly IBotApiProvider _botProvider;
+        private readonly ItmoApiProvider _itmoProvider;
 
-        public Bot(IBotApiProvider apiProvider)
+        public Bot(IBotApiProvider botProvider)
         {
-            _provider = apiProvider ?? throw new BotValidException("Api provider not founded");
+            _botProvider = botProvider ?? throw new BotValidException("Api provider not founded");
+            _itmoProvider = new ItmoApiProvider();
         }
 
         public void Process()
         {
-            _commandHandler = new CommandHandler(new CommandsList(), _provider);
+            _commandHandler = new CommandHandler(new CommandsList(), _botProvider, _itmoProvider);
 
-            _provider.OnMessage += ApiProviderOnMessage;
+            _botProvider.OnMessage += ApiProviderOnMessage;
         }
 
         private void ApiProviderOnMessage(object sender, BotEventArgs e)
         {
-            CommandContainer commandWithArgs = Utilities.ParseCommand(e.Text).Result;
-
+            CommandArgumentContainer commandWithArgs = Utilities.ParseCommand(e.Text).Result;
+            
             if (!_commandHandler.IsCommandCorrect(commandWithArgs))
             {
                 // TODO: Logger (user is so stupid to write correct command)
             }
 
-            var commandExecuteTask = _commandHandler.ExecuteCommand(commandWithArgs.Name, new CommandArgumentContainer(e.GroupId, commandWithArgs.Args.ToList()));
+            var commandExecuteTask = _commandHandler.ExecuteCommand(commandWithArgs);
+            commandExecuteTask.WaitSafe();
 
             if (commandExecuteTask.IsFaulted)
             {

@@ -2,7 +2,6 @@
 
 namespace ITMOSchedule.Commands
 {
-    //TODO: rename coz of collision with System.Input.ICommand
     public interface IBotCommand
     {
         string CommandName { get; }

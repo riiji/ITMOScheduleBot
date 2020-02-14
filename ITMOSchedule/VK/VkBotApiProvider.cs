@@ -29,10 +29,12 @@ namespace ITMOSchedule.VK
         {
             OnMessage?.Invoke(sender, new BotEventArgs(e.Text, e.PeerId));
         }
-
+        
         public Task WriteMessage(int groupId, string message)
         {
-            var result = _vkApi.Messages.Send(null, Utilities.GetRandom(), groupId);
+            var result = _vkApi.Messages.Send(null, Utilities.GetRandom(), groupId, null, null, null, message);
+            
+            result.WaitSafe();
 
             Console.WriteLine(result.Exception);
 

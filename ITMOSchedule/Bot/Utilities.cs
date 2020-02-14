@@ -14,17 +14,17 @@ namespace ITMOSchedule.Bot
             return Random.Next();
         }
 
-        public static Task<CommandContainer> ParseCommand(string commandsWithArgs)
+        public static Task<CommandArgumentContainer> ParseCommand(string commandsWithArgs)
         {
-            var command = commandsWithArgs.Split().FirstOrDefault();
+            var commandName = commandsWithArgs.Split().FirstOrDefault();
 
-            if (command == null)
-                return Task.FromException<CommandContainer>(new BotValidException("Parse error, command not founded"));
+            if (commandName == null)
+                return Task.FromException<CommandArgumentContainer>(new BotValidException("Parse error, command not founded"));
 
             // args without command
-            var args = commandsWithArgs.Split().Skip(1).ToArray();
+            var args = commandsWithArgs.Split().Skip(1);
 
-            return Task.FromResult(new CommandContainer(command, args));
+            return Task.FromResult(new CommandArgumentContainer(args.ToList(), commandName));
         }
     }
 

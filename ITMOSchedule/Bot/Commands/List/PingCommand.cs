@@ -7,7 +7,7 @@ namespace ITMOSchedule.Bot.Commands.List
 {
     public class PingCommand : IBotCommand
     {
-        private IBotApiProvider _provider;
+        private readonly IBotApiProvider _provider;
 
         public PingCommand(IBotApiProvider provider)
         {
@@ -20,7 +20,7 @@ namespace ITMOSchedule.Bot.Commands.List
 
         public bool CanExecute(CommandArgumentContainer args)
         {
-            return true;
+            return _provider != null;
         }
 
         public CommandExecuteResult Execute(CommandArgumentContainer args)

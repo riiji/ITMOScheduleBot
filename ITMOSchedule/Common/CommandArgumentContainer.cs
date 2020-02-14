@@ -8,17 +8,21 @@ namespace ITMOSchedule.Common
     {
         public int GroupId { get; set; }
 
-        public List<String> Arguments { get; set; }
+        public string CommandName { get; set; }
 
-        public CommandArgumentContainer(int groupId, List<string> arguments)
+        public List<string> Arguments { get; set; }
+
+        public CommandArgumentContainer(int groupId, List<string> arguments, string commandName)
         {
             GroupId = groupId;
             Arguments = arguments;
+            CommandName = commandName;
         }
 
-        public CommandArgumentContainer(List<string> arguments)
+        public CommandArgumentContainer(List<string> arguments, string commandName)
         {
             Arguments = arguments;
+            CommandName = commandName;
         }
     }
 }
