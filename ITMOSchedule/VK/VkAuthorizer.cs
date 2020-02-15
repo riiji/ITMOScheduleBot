@@ -34,6 +34,7 @@ namespace ITMOSchedule.VK
             ).Result;
         }
 
+        //TODO: null-checker to .ctor
         public Vkontakte GetApi()
         {
             return _vkApi ?? throw new BotValidException("Invalid VkApi");

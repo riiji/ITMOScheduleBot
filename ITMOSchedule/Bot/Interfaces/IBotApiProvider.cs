@@ -1,12 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace ITMOSchedule.Bot.Interfaces
 {
     public interface IBotApiProvider
     {
-        public delegate void MessageDelegate(object sender, BotEventArgs e);
-
-        public event MessageDelegate OnMessage;
+        public event EventHandler<BotEventArgs> OnMessage;
 
         public Task WriteMessage(int groupId, string message);
     }

@@ -1,6 +1,8 @@
-﻿namespace ITMOSchedule.Bot
+﻿using System;
+
+namespace ITMOSchedule.Bot
 {
-    public class BotEventArgs
+    public class BotEventArgs : EventArgs
     {
         public BotEventArgs(string text, int groupId)
         {

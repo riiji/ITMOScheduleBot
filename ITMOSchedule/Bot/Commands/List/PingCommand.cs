@@ -20,6 +20,7 @@ namespace ITMOSchedule.Bot.Commands.List
 
         public bool CanExecute(CommandArgumentContainer args)
         {
+            //TODO: to .ctor
             return _provider != null;
         }
 

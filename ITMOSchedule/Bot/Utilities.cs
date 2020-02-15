@@ -9,6 +9,7 @@ namespace ITMOSchedule.Bot
     public static class Utilities
     {
         private static readonly Random Random = new Random();
+
         public static int GetRandom()
         {
             return Random.Next();
@@ -16,6 +17,7 @@ namespace ITMOSchedule.Bot
 
         public static Task<CommandArgumentContainer> ParseCommand(string commandsWithArgs)
         {
+            //TODO: don't split twice 
             var commandName = commandsWithArgs.Split().FirstOrDefault();
 
             if (commandName == null)
