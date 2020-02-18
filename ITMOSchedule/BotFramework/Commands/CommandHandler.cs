@@ -1,13 +1,11 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using ITMOSchedule.Bot.Commands.List;
-using ITMOSchedule.Bot.Exceptions;
-using ITMOSchedule.Bot.Interfaces;
+using ItmoSchedule.BotFramework.Commands.List;
+using ItmoSchedule.BotFramework.Interfaces;
 using ITMOSchedule.Common;
-using ITMOSchedule.VK;
 using ItmoScheduleApiWrapper;
 
-namespace ITMOSchedule.Bot.Commands
+namespace ItmoSchedule.BotFramework.Commands
 {
     public class CommandHandler
     {
@@ -28,7 +26,7 @@ namespace ITMOSchedule.Bot.Commands
         {
             var command = _commands.GetCommand(userCommand.CommandName);
 
-            return command.CanExecute(new CommandArgumentContainer(userCommand.Arguments, userCommand.CommandName));
+            return command.CanExecute(new CommandArgumentContainer(0, userCommand.Arguments, userCommand.CommandName));
         }
 
         public Task RegisterCommands()
@@ -36,14 +34,14 @@ namespace ITMOSchedule.Bot.Commands
             //TODO: move out from this class
             _commands.AddCommand(new PingCommand(_botProvider));
             _commands.AddCommand(new GetGroupScheduleCommand(_botProvider, _itmoProvider));
-            
+            _commands.AddCommand(new HelpCommand(_botProvider, _commands));
+
             return Task.CompletedTask;
         }
 
         public Task ExecuteCommand(CommandArgumentContainer args)
         {
             var command = _commands.GetCommand(args.CommandName);
-
             command.Execute(args);
 
             return Task.CompletedTask;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ITMOSchedule.Bot
+namespace ItmoSchedule.BotFramework
 {
     public class BotEventArgs : EventArgs
     {

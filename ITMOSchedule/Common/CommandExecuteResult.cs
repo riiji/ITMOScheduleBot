@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace ITMOSchedule.Common
+﻿namespace ITMOSchedule.Common
 {
     public class CommandExecuteResult
     {
-        public CommandExecuteResult(Boolean isSuccess)
+        public CommandExecuteResult(bool isSuccess)
         {
             IsSuccess = isSuccess;
         }

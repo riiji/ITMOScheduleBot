@@ -1,14 +1,15 @@
-﻿using System.Linq;
-using ITMOSchedule.Bot.Commands;
-using ITMOSchedule.Bot.Exceptions;
-using ITMOSchedule.Bot.Interfaces;
+﻿using System;
+using System.Linq;
+using ItmoSchedule.BotFramework.Commands;
+using ItmoSchedule.BotFramework.Exceptions;
+using ItmoSchedule.BotFramework.Interfaces;
 using ITMOSchedule.Common;
+using ITMOSchedule.Extensions;
 using ItmoScheduleApiWrapper;
 
-namespace ITMOSchedule.Bot
+namespace ItmoSchedule.BotFramework
 {
-    //TODO:; dispose
-    public class Bot
+    public class Bot : IDisposable
     {
         private CommandHandler _commandHandler;
         private readonly IBotApiProvider _botProvider;
@@ -29,20 +30,21 @@ namespace ITMOSchedule.Bot
 
         private void ApiProviderOnMessage(object sender, BotEventArgs e)
         {
-            CommandArgumentContainer commandWithArgs = Utilities.ParseCommand(e.Text).Result;
-            
-            if (!_commandHandler.IsCommandCorrect(commandWithArgs))
-            {
-                // TODO: Logger (user is so stupid to write correct command)
-            }
+            CommandArgumentContainer commandWithArgs = Utilities.ParseCommand(e.Text, e.GroupId).Result;
 
+            if (!_commandHandler.IsCommandCorrect(commandWithArgs))
+                Utilities.Log(Utilities.LogLevel.Info, $"Command {commandWithArgs.Arguments.FirstOrDefault()} isnt corrected");
+            
             var commandExecuteTask = _commandHandler.ExecuteCommand(commandWithArgs);
             commandExecuteTask.WaitSafe();
 
             if (commandExecuteTask.IsFaulted)
-            {
-                // TODO: Logger (coder is so stupid to write correct code)
-            }
+                Utilities.Log(Utilities.LogLevel.Warning, $"Command {commandWithArgs.Arguments.FirstOrDefault()} not founded");
+        }
+
+        public void Dispose()
+        {
+            _botProvider.OnMessage -= ApiProviderOnMessage;
         }
     }
 }

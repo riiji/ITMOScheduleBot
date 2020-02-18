@@ -1,4 +1,4 @@
-﻿namespace ITMOSchedule.Bot.Interfaces
+﻿namespace ItmoSchedule.BotFramework.Interfaces
 {
     public interface IAuthorize
     {

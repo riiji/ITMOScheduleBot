@@ -1,7 +1,6 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace ITMOSchedule
+namespace ITMOSchedule.Extensions
 {
     //TODO: move to folder
     public static class Extensions

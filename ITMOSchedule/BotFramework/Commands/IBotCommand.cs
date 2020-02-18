@@ -1,6 +1,6 @@
 ﻿using ITMOSchedule.Common;
 
-namespace ITMOSchedule.Commands
+namespace ItmoSchedule.BotFramework.Commands
 {
     public interface IBotCommand
     {

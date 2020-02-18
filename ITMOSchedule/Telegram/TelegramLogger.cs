@@ -1,9 +1,8 @@
 ﻿using System;
-using ITMOSchedule.Bot.Interfaces;
 using ITMOSchedule.Telegram;
 using Telegram.Bot;
 
-namespace ITMOSchedule.Bot
+namespace ItmoSchedule.Telegram
 {
     public class TelegramLogger
     {

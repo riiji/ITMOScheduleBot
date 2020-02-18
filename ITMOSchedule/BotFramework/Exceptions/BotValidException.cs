@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ITMOSchedule.Bot.Exceptions
+namespace ItmoSchedule.BotFramework.Exceptions
 {
-    public class BotValidException : NullReferenceException 
+    public class BotValidException : ArgumentNullException 
     {
         public BotValidException()
         {

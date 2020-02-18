@@ -1,53 +1,67 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ITMOSchedule.Bot;
-using ITMOSchedule.Bot.Interfaces;
+using ItmoSchedule.BotFramework;
+using ItmoSchedule.BotFramework.Exceptions;
+using ItmoSchedule.BotFramework.Interfaces;
+using ITMOSchedule.Extensions;
+using ItmoSchedule.VK;
 using VkApi.Wrapper;
+using VkApi.Wrapper.Auth;
+using VkApi.Wrapper.LongPolling.Bot;
+using VkApi.Wrapper.Types.Groups;
 using VkApi.Wrapper.Types.Messages;
 
 namespace ITMOSchedule.VK
 {
-    //TODO: dispose?
-    public class VkBotApiProvider : IBotApiProvider
+    public class VkBotApiProvider : IBotApiProvider, IDisposable
     {
-        private readonly Vkontakte _vkApi;
+        private Vkontakte _vkApi;
+        private BotLongPollClient _client;
 
         public event EventHandler<BotEventArgs> OnMessage;
-
-        public VkBotApiProvider(VkAuthorizer vkAuth)
-        {
-            var vkAuthorizer = vkAuth;
-            vkAuthorizer.Auth();
-
-            //TODO: huinya, peredelyvai
-            _vkApi = vkAuthorizer.GetApi();
-
-            var client = vkAuthorizer.GetClient();
-
-            //TODO: dispose
-            client.OnMessageNew += Client_OnMessageNew;
-        }
 
         private void Client_OnMessageNew(object sender, MessagesMessage e)
         {
             OnMessage?.Invoke(sender, new BotEventArgs(e.Text, e.PeerId));
         }
         
-        //TODO: remove Task
-        public Task WriteMessage(int groupId, string message)
+        public void WriteMessage(int groupId, string message)
         {
             var result = _vkApi.Messages.Send(
                 randomId: Utilities.GetRandom(),
                 peerId: groupId,
                 message: message);
             
-            //TODO: return failed state
             result.WaitSafe();
 
-            //TODO: write to logger only if exception exists
-            Console.WriteLine(result.Exception);
 
-            return Task.CompletedTask;
+            if (result.IsFaulted)
+                Utilities.Log(Utilities.LogLevel.Error, $"Write message exception {result.Exception}");
+        }
+
+        public void Dispose()
+        {
+            _client.OnMessageNew -= Client_OnMessageNew;
+            _vkApi?.Dispose();
+        }
+
+        public void Auth()
+        {
+            AccessToken accessToken = AccessToken.FromString(VkSettings.Key);
+            _vkApi = new Vkontakte(VkSettings.AppId, VkSettings.AppSecret) { AccessToken = accessToken };
+
+            GroupsLongPollServer settings = _vkApi.Groups.GetLongPollServer(VkSettings.GroupId).Result;
+
+            _client = _vkApi.StartBotLongPollClient
+            (
+                settings.Server,
+                settings.Key,
+                Convert.ToInt32(settings.Ts)
+            ).Result;
+
+            _client.OnMessageNew += Client_OnMessageNew;
+
+            Utilities.Log(Utilities.LogLevel.Info, "Auth successfully");
         }
     }
 }

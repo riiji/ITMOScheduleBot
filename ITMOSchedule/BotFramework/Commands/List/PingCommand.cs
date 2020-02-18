@@ -1,9 +1,9 @@
 ﻿using System;
-using ITMOSchedule.Bot.Interfaces;
-using ITMOSchedule.Commands;
+using ItmoSchedule.BotFramework.Exceptions;
+using ItmoSchedule.BotFramework.Interfaces;
 using ITMOSchedule.Common;
 
-namespace ITMOSchedule.Bot.Commands.List
+namespace ItmoSchedule.BotFramework.Commands.List
 {
     public class PingCommand : IBotCommand
     {
@@ -11,7 +11,7 @@ namespace ITMOSchedule.Bot.Commands.List
 
         public PingCommand(IBotApiProvider provider)
         {
-            _provider = provider;
+            _provider = provider ?? throw new BotValidException("Ping Command: Provider not founded");
         }
 
         public string CommandName { get; } = "Ping";
@@ -20,8 +20,7 @@ namespace ITMOSchedule.Bot.Commands.List
 
         public bool CanExecute(CommandArgumentContainer args)
         {
-            //TODO: to .ctor
-            return _provider != null;
+            return true;
         }
 
         public CommandExecuteResult Execute(CommandArgumentContainer args)
