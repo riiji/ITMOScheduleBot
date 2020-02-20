@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Threading.Tasks;
+using ITMOSchedule.Bot;
 using ItmoSchedule.BotFramework;
-using ItmoSchedule.BotFramework.Exceptions;
 using ItmoSchedule.BotFramework.Interfaces;
 using ITMOSchedule.Extensions;
-using ItmoSchedule.VK;
 using VkApi.Wrapper;
 using VkApi.Wrapper.Auth;
 using VkApi.Wrapper.LongPolling.Bot;
@@ -17,7 +15,6 @@ namespace ITMOSchedule.VK
     {
         private Vkontakte _vkApi;
         private BotLongPollClient _client;
-
         public event EventHandler<BotEventArgs> OnMessage;
 
         private void Client_OnMessageNew(object sender, MessagesMessage e)

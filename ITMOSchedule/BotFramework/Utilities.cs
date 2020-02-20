@@ -26,9 +26,6 @@ namespace ItmoSchedule.BotFramework
             // skip command name
             var args = commands.Skip(1);
 
-            if (commandName == null)
-                return Task.FromException<CommandArgumentContainer>(new BotValidException("Parse error, command not founded"));
-
             return Task.FromResult(new CommandArgumentContainer(groupId, args.ToList(), commandName));
         }
 
