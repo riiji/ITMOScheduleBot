@@ -33,13 +33,17 @@ namespace ItmoSchedule.BotFramework
             CommandArgumentContainer commandWithArgs = Utilities.ParseCommand(e.Text, e.GroupId).Result;
 
             if (!_commandHandler.IsCommandCorrect(commandWithArgs))
-                Utilities.Log(Utilities.LogLevel.Info, $"Command {commandWithArgs.Arguments.FirstOrDefault()} isnt corrected");
+            {
+                Utilities.Log(Utilities.LogLevel.Info, $"Command {commandWithArgs.CommandName} isnt corrected");
+                _botProvider.WriteMessage(commandWithArgs.GroupId, "invalid command args");
+                return;
+            }
             
             var commandExecuteTask = _commandHandler.ExecuteCommand(commandWithArgs);
             commandExecuteTask.WaitSafe();
 
             if (commandExecuteTask.IsFaulted)
-                Utilities.Log(Utilities.LogLevel.Warning, $"Command {commandWithArgs.Arguments.FirstOrDefault()} not founded");
+                Utilities.Log(Utilities.LogLevel.Warning, $"Error: {commandExecuteTask.Exception}");
         }
 
         public void Dispose()

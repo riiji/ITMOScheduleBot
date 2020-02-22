@@ -8,6 +8,8 @@ namespace ItmoSchedule.BotFramework.Commands
 
         string Description { get; }
 
+        string[] Args { get; }
+
         bool CanExecute(CommandArgumentContainer args);
 
         CommandExecuteResult Execute(CommandArgumentContainer args);

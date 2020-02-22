@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using ItmoSchedule.BotFramework.Exceptions;
-using ITMOSchedule.Common;
 
 namespace ItmoSchedule.BotFramework.Commands
 {
@@ -14,33 +13,11 @@ namespace ItmoSchedule.BotFramework.Commands
             Commands.Add(command.CommandName, command);
         }
 
-        public IBotCommand GetCommand(string commandName)
+        public Task<IBotCommand> GetCommand(string commandName)
         {
-            if(Commands.TryGetValue(commandName, out IBotCommand command))
-                return command;
-
-            throw new BotValidException("Command not founded!");
-        }
-
-        public bool IsCommandExisted(string commandName)
-        {
-            return Commands.ContainsKey(commandName);
-        }
-
-        public List<CommandExecuteResult> ExecuteAllAvailable(CommandArgumentContainer args)
-        {
-            return Commands.Values
-                .Where(command => command.CanExecute(args))
-                .Select(command => command.Execute(args))
-                .ToList();
-        }
-
-        public CommandExecuteResult TryExecuteFirstAvailable(CommandArgumentContainer args)
-        {
-            return Commands.Values
-                .Where(command => command.CanExecute(args))
-                .Select(command => command.Execute(args))
-                .FirstOrDefault();
+            return Commands.TryGetValue(commandName, out IBotCommand command) 
+                ? Task.FromResult(command) 
+                : Task.FromException<IBotCommand>(new BotValidException("Command not founded"));
         }
     }
 }

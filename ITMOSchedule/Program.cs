@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using ItmoSchedule.BotFramework;
 using ITMOSchedule.VK;
-using VkApi.Wrapper.Services;
 
 namespace ItmoSchedule
 {

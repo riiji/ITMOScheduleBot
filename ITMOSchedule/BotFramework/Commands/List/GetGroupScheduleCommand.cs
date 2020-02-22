@@ -3,8 +3,11 @@ using System.Linq;
 using ItmoSchedule.BotFramework.Exceptions;
 using ItmoSchedule.BotFramework.Interfaces;
 using ITMOSchedule.Common;
+using ITMOSchedule.Extensions;
 using ItmoScheduleApiWrapper;
 using ItmoScheduleApiWrapper.Helpers;
+using Microsoft.VisualBasic.CompilerServices;
+using NLog;
 using Telegram.Bot.Types.InlineQueryResults.Abstractions;
 
 namespace ItmoSchedule.BotFramework.Commands.List
@@ -17,29 +20,50 @@ namespace ItmoSchedule.BotFramework.Commands.List
         public GetGroupScheduleCommand(IBotApiProvider botProvider, ItmoApiProvider itmoProvider)
         {
             _botProvider = botProvider ?? throw new BotValidException("Bot provider not founded");
-            _itmoProvider = itmoProvider ?? throw new BotValidException("Itmo provider not founded");
+            _itmoProvider = itmoProvider ?? throw new BotValidException("Itmo provider not founded");  
         }
 
         public string CommandName { get; } = "GetGroupSchedule";
-        public string Description { get; } = "Get a group schedule by group number";
+        public string Description { get; } = "Get group schedule in a date day";
+        public string[] Args { get; } = new[] {"GroupNumber","Date"};
+
 
         public bool CanExecute(CommandArgumentContainer args)
         {
-            return true;    
+            if (args.Arguments.Count != Args.Length)
+                return false;
+
+            var group = args.Arguments.FirstOrDefault();
+
+            if (group != null && group.Length != Utilities.GroupNameLength)
+                return false;
+
+            var dateTimeResult = DateTime.TryParse(args.Arguments.Last(), out DateTime time);
+            
+            if (dateTimeResult == false)
+                return false;
+
+            return true;
         }
 
         public CommandExecuteResult Execute(CommandArgumentContainer args)
         {
             var groupNumber = args.Arguments.FirstOrDefault();
+            var dateTime = DateTime.Parse(args.Arguments.Last());
 
-            var lessonList = _itmoProvider
-                .ScheduleApi
-                .GetGroupSchedule(groupNumber)
-                .Result
-                .Schedule
-                .GetTodaySchedule(DateConvertorService.FirstWeekEven);
+            var lessonListTask = _itmoProvider.ScheduleApi.GetGroupSchedule(groupNumber);
+            lessonListTask.WaitSafe();
 
-            string result = string.Join(Environment.NewLine, 
+            if (lessonListTask.IsFaulted)
+            {
+                _botProvider.WriteMessage(args.GroupId, lessonListTask.Exception.Message);
+                return new CommandExecuteResult(false);
+            }
+
+            var lessonList =
+                lessonListTask.Result.Schedule.GetDaySchedule(dateTime, DateConvertorService.FirstWeekEven);
+
+            var result = string.Join(Environment.NewLine,
                 lessonList.Select(lesson => lesson.StartTime + " " + lesson.SubjectTitle));
 
             if (result == string.Empty)

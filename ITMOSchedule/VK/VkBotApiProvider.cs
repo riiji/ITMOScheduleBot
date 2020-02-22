@@ -1,8 +1,8 @@
 ﻿using System;
-using ITMOSchedule.Bot;
 using ItmoSchedule.BotFramework;
 using ItmoSchedule.BotFramework.Interfaces;
 using ITMOSchedule.Extensions;
+using ItmoSchedule.VK;
 using VkApi.Wrapper;
 using VkApi.Wrapper.Auth;
 using VkApi.Wrapper.LongPolling.Bot;
@@ -30,7 +30,6 @@ namespace ITMOSchedule.VK
                 message: message);
             
             result.WaitSafe();
-
 
             if (result.IsFaulted)
                 Utilities.Log(Utilities.LogLevel.Error, $"Write message exception {result.Exception}");

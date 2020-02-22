@@ -1,5 +1,4 @@
-﻿using System;
-using ItmoSchedule.BotFramework.Exceptions;
+﻿using ItmoSchedule.BotFramework.Exceptions;
 using ItmoSchedule.BotFramework.Interfaces;
 using ITMOSchedule.Common;
 
@@ -17,6 +16,7 @@ namespace ItmoSchedule.BotFramework.Commands.List
         public string CommandName { get; } = "Ping";
 
         public string Description { get; } = "Answer pong on ping message";
+        public string[] Args { get; } = new string[0];
 
         public bool CanExecute(CommandArgumentContainer args)
         {

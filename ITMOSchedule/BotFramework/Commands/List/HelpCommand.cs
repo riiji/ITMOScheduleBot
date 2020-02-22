@@ -2,7 +2,6 @@
 using System.Linq;
 using ItmoSchedule.BotFramework.Interfaces;
 using ITMOSchedule.Common;
-using static System.String;
 
 namespace ItmoSchedule.BotFramework.Commands.List
 {
@@ -19,6 +18,7 @@ namespace ItmoSchedule.BotFramework.Commands.List
 
         public string CommandName { get; } = "Help";
         public string Description { get; } = "Print all available commands";
+        public string[] Args { get; } = new string[0];
 
         public bool CanExecute(CommandArgumentContainer args)
         {
@@ -27,9 +27,10 @@ namespace ItmoSchedule.BotFramework.Commands.List
 
         public CommandExecuteResult Execute(CommandArgumentContainer args)
         {
-            var result = Join(Environment.NewLine,
+            var result = string.Join(Environment.NewLine,
                 _commandList.Commands.ToList()
-                    .Select(commands => $"{commands.Value.CommandName} : {commands.Value.Description}"));
+                    .Select(commands => 
+                        $"{commands.Value.CommandName} : {commands.Value.Description}, args: {commands.Value.Args}"));
 
             _provider.WriteMessage(args.GroupId, result);
             return new CommandExecuteResult(true);

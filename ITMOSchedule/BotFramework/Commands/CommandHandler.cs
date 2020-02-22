@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ItmoSchedule.BotFramework.Commands.List;
 using ItmoSchedule.BotFramework.Interfaces;
 using ITMOSchedule.Common;
+using ITMOSchedule.Extensions;
 using ItmoScheduleApiWrapper;
 
 namespace ItmoSchedule.BotFramework.Commands
@@ -24,27 +24,37 @@ namespace ItmoSchedule.BotFramework.Commands
 
         public bool IsCommandCorrect(CommandArgumentContainer userCommand)
         {
-            var command = _commands.GetCommand(userCommand.CommandName);
+            var commandTask = _commands.GetCommand(userCommand.CommandName);
+            commandTask.WaitSafe();
+
+            if (commandTask.IsFaulted)
+                return false;
+
+            IBotCommand command = commandTask.Result;
 
             return command.CanExecute(new CommandArgumentContainer(0, userCommand.Arguments, userCommand.CommandName));
         }
 
-        public Task RegisterCommands()
+        public void RegisterCommands()
         {
-            //TODO: move out from this class
             _commands.AddCommand(new PingCommand(_botProvider));
             _commands.AddCommand(new GetGroupScheduleCommand(_botProvider, _itmoProvider));
+            _commands.AddCommand(new GetTodayGroupScheduleCommand(_botProvider, _itmoProvider));
             _commands.AddCommand(new HelpCommand(_botProvider, _commands));
-
-            return Task.CompletedTask;
         }
 
-        public Task ExecuteCommand(CommandArgumentContainer args)
+        public Task<CommandExecuteResult> ExecuteCommand(CommandArgumentContainer args)
         {
-            var command = _commands.GetCommand(args.CommandName);
-            command.Execute(args);
+            var commandTask = _commands.GetCommand(args.CommandName);
+            commandTask.WaitSafe();
 
-            return Task.CompletedTask;
+            if (commandTask.IsFaulted)
+                return Task.FromException<CommandExecuteResult>(commandTask.Exception);
+
+            IBotCommand command = commandTask.Result;
+            CommandExecuteResult commandExecuteResult = command.Execute(args);
+
+            return Task.FromResult(commandExecuteResult);
         }
     }
 }

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using ItmoSchedule.BotFramework.Commands;
-using ItmoSchedule.BotFramework.Exceptions;
 using ITMOSchedule.Common;
 
 namespace ItmoSchedule.BotFramework
@@ -11,6 +8,8 @@ namespace ItmoSchedule.BotFramework
     public static class Utilities
     {
         private static readonly Random Random = new Random();
+
+        public const int GroupNameLength = 5;
 
         public static int GetRandom()
         {
