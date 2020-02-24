@@ -15,11 +15,18 @@ namespace ITMOSchedule.VK
     {
         private Vkontakte _vkApi;
         private BotLongPollClient _client;
+        private readonly VkSettings _settings;
+
+        public VkBotApiProvider(VkSettings settings)
+        {
+            _settings = settings;
+        }
+
         public event EventHandler<BotEventArgs> OnMessage;
 
         private void Client_OnMessageNew(object sender, MessagesMessage e)
         {
-            OnMessage?.Invoke(sender, new BotEventArgs(e.Text, e.PeerId));
+            OnMessage?.Invoke(sender, new BotEventArgs(e.Text, e.PeerId,e.FromId));
         }
         
         public void WriteMessage(int groupId, string message)
@@ -32,7 +39,12 @@ namespace ITMOSchedule.VK
             result.WaitSafe();
 
             if (result.IsFaulted)
-                Utilities.Log(Utilities.LogLevel.Error, $"Write message exception {result.Exception}");
+            {
+                if (result.Exception.InnerException is ApiException)
+                    Auth();
+
+                Utilities.Log(Utilities.LogLevel.Error, $"WriteMessage exception {result.Exception}");
+            }
         }
 
         public void Dispose()
@@ -43,21 +55,32 @@ namespace ITMOSchedule.VK
 
         public void Auth()
         {
-            AccessToken accessToken = AccessToken.FromString(VkSettings.Key);
-            _vkApi = new Vkontakte(VkSettings.AppId, VkSettings.AppSecret) { AccessToken = accessToken };
+            AccessToken accessToken = AccessToken.FromString(_settings.Key);
+            _vkApi = new Vkontakte(_settings.AppId, _settings.AppSecret) { AccessToken = accessToken };
+            GroupsLongPollServer settings = _vkApi.Groups.GetLongPollServer(_settings.GroupId).Result;
 
-            GroupsLongPollServer settings = _vkApi.Groups.GetLongPollServer(VkSettings.GroupId).Result;
-
-            _client = _vkApi.StartBotLongPollClient
+            var clientTask = _vkApi.StartBotLongPollClient
             (
                 settings.Server,
                 settings.Key,
                 Convert.ToInt32(settings.Ts)
-            ).Result;
+            );
+
+            clientTask.WaitSafe();
+
+            if (clientTask.IsFaulted)
+            {
+                Utilities.Log(Utilities.LogLevel.Error, clientTask.Exception.Message);
+                return;
+            }
+
+            _client = clientTask.Result;
 
             _client.OnMessageNew += Client_OnMessageNew;
 
             Utilities.Log(Utilities.LogLevel.Info, "Auth successfully");
         }
+
+ 
     }
 }
