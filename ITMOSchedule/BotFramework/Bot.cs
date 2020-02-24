@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using ItmoSchedule.BotFramework.Commands;
+using ItmoSchedule.BotFramework.Commands.List;
 using ItmoSchedule.BotFramework.Exceptions;
 using ItmoSchedule.BotFramework.Interfaces;
 using ITMOSchedule.Common;
@@ -24,7 +24,6 @@ namespace ItmoSchedule.BotFramework
         public void Process()
         {
             _commandHandler = new CommandHandler(new CommandsList(), _botProvider, _itmoProvider);
-
             _botProvider.OnMessage += ApiProviderOnMessage;
         }
 

@@ -6,7 +6,6 @@ using ITMOSchedule.Common;
 using ITMOSchedule.Extensions;
 using ItmoScheduleApiWrapper;
 using ItmoScheduleApiWrapper.Helpers;
-using ItmoScheduleApiWrapper.Models;
 
 namespace ItmoSchedule.BotFramework.Commands.List
 {
@@ -23,7 +22,7 @@ namespace ItmoSchedule.BotFramework.Commands.List
 
         public string CommandName { get; } = "GetTodayGroupSchedule";
         public string Description { get; } = "Get a group schedule by group number";
-        public string[] Args { get; } = new[] { "GroupNumber" };
+        public string[] Args { get; } = { "GroupNumber" };
 
         public bool CanExecute(CommandArgumentContainer args)
         {

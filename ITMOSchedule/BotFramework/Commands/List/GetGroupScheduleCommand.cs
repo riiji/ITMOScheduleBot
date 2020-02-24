@@ -6,9 +6,6 @@ using ITMOSchedule.Common;
 using ITMOSchedule.Extensions;
 using ItmoScheduleApiWrapper;
 using ItmoScheduleApiWrapper.Helpers;
-using Microsoft.VisualBasic.CompilerServices;
-using NLog;
-using Telegram.Bot.Types.InlineQueryResults.Abstractions;
 
 namespace ItmoSchedule.BotFramework.Commands.List
 {
@@ -25,7 +22,7 @@ namespace ItmoSchedule.BotFramework.Commands.List
 
         public string CommandName { get; } = "GetGroupSchedule";
         public string Description { get; } = "Get group schedule in a date day";
-        public string[] Args { get; } = new[] {"GroupNumber","Date"};
+        public string[] Args { get; } = {"GroupNumber","Date"};
 
 
         public bool CanExecute(CommandArgumentContainer args)
