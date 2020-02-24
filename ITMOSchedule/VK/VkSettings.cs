@@ -1,13 +1,27 @@
-﻿namespace ITMOSchedule.Bot
+﻿using System;
+using ItmoSchedule.Database;
+
+namespace ItmoSchedule.VK
 {
-    public static class VkSettings
+    public class VkSettings
     {
-        public static string Key { get; set; }
+        public VkSettings()
+        {
+            using var db = new DatabaseContext();
+            var settings = db.BotSettings;
 
-        public static int AppId { get; set; }
+            Key = settings.Find("VkKey").Value;
+            AppId = Convert.ToInt32(settings.Find("VkAppId").Value);
+            AppSecret = settings.Find("VkAppSecret").Value;
+            GroupId = Convert.ToInt32(settings.Find("VkGroupId").Value);
+        }
 
-        public static string AppSecret { get; set; }
+        public string Key { get; set; }
 
-        public static int GroupId { get; set; }
+        public int AppId { get; set; }
+
+        public string AppSecret { get; set; }
+
+        public int GroupId { get; set; }
     }
 }
