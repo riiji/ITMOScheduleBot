@@ -27,10 +27,11 @@ namespace ItmoSchedule.BotFramework.Commands.List
 
         public CommandExecuteResult Execute(CommandArgumentContainer args)
         {
-            var result = string.Join(Environment.NewLine,
+            var result = string.Join(Environment.NewLine+Environment.NewLine,
                 _commandList.Commands.ToList()
-                    .Select(commands => 
-                        $"{commands.Value.CommandName} : {commands.Value.Description}, args: {commands.Value.Args}"));
+                    .Select(commands =>
+                        $"{commands.Value.CommandName} : {commands.Value.Description}, {Environment.NewLine}args: " +
+                        $"{string.Join(", ", commands.Value.Args.Select(s=>s))}"));
 
             _provider.WriteMessage(args.GroupId, result);
             return new CommandExecuteResult(true);

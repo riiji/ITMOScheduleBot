@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using ItmoSchedule.BotFramework;
+using ItmoSchedule.VK;
 using ITMOSchedule.VK;
 
 namespace ItmoSchedule
@@ -8,7 +9,7 @@ namespace ItmoSchedule
     {
         public async Task MainAsync()
         { 
-            var apiProvider = new VkBotApiProvider();
+            var apiProvider = new VkBotApiProvider(new VkSettings());
             apiProvider.Auth();
 
             var bot = new Bot(apiProvider);
