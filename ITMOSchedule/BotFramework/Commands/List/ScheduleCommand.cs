@@ -33,7 +33,7 @@ namespace ItmoSchedule.BotFramework.Commands.List
         {
             using var dbContext = new DatabaseContext();
 
-            var group = dbContext.GroupSettings.Find(args.GroupId);
+            var group = dbContext.GroupSettings.Find(args.GroupId.ToString());
             
             if(group==null)
                 return new CommandExecuteResult(false);

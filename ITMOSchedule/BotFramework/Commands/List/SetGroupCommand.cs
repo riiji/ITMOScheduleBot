@@ -42,8 +42,11 @@ namespace ItmoSchedule.BotFramework.Commands.List
         {
             using var dbContext = new DatabaseContext();
 
-            var oldSetting = dbContext.GroupSettings.Find(args.GroupId);
-            dbContext.GroupSettings.Remove(oldSetting);
+            var oldSetting = dbContext.GroupSettings.Find(args.GroupId.ToString());
+
+            if (oldSetting != null)
+                dbContext.GroupSettings.Remove(oldSetting);
+             
             dbContext.GroupSettings.Add(new GroupSettings(args.GroupId.ToString(), args.Arguments.FirstOrDefault()));
             dbContext.SaveChanges();
 

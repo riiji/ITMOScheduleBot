@@ -42,6 +42,7 @@ namespace ItmoSchedule.BotFramework.Commands
             _commands.AddCommand(new GetTodayGroupScheduleCommand(_botProvider, _itmoProvider));
             _commands.AddCommand(new HelpCommand(_botProvider, _commands));
             _commands.AddCommand(new SetGroupCommand(_botProvider));
+            _commands.AddCommand(new ScheduleCommand(_botProvider, _itmoProvider));
         }
 
         public Task<CommandExecuteResult> ExecuteCommand(CommandArgumentContainer args)
