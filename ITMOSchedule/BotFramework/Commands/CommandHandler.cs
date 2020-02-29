@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using ItmoSchedule.BotFramework.Commands.BotCommands;
 using ItmoSchedule.BotFramework.Commands.List;
 using ItmoSchedule.BotFramework.Interfaces;
 using ITMOSchedule.Common;
