@@ -63,14 +63,11 @@ namespace ItmoSchedule.BotFramework.Commands.BotCommands
 
                     return InnerExecute(args.Arguments.FirstOrDefault(), time);
 
-                default: return new CommandExecuteResult(false);
+                default: return new CommandExecuteResult(false, "invalid arguments");
             }
 
             CommandExecuteResult InnerExecute(string groupName, DateTime scheduleDateTime)
             {
-                if (groupName == null)
-                    return new CommandExecuteResult(false);
-
                 var scheduleTask = _itmoProvider.ScheduleApi.GetGroupSchedule(groupName);
                 scheduleTask.WaitSafe();
 
