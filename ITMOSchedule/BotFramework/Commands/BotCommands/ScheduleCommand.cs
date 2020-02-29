@@ -1,30 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using ItmoSchedule.BotFramework.Interfaces;
 using ITMOSchedule.Common;
 using ItmoSchedule.Database;
 using ITMOSchedule.Extensions;
+using ItmoSchedule.Tools;
+using ITMOSchedule.VK;
 using ItmoScheduleApiWrapper;
 using ItmoScheduleApiWrapper.Helpers;
-using ItmoScheduleApiWrapper.Models;
 
 namespace ItmoSchedule.BotFramework.Commands.BotCommands
 {
     public class ScheduleCommand : IBotCommand
     {
-        private IBotApiProvider _botProvider;
+        private readonly IBotApiProvider _botProvider;
         private readonly ItmoApiProvider _itmoProvider;
 
         public ScheduleCommand(IBotApiProvider botProvider, ItmoApiProvider itmoProvider)
         {
-            _itmoProvider = itmoProvider;
             _botProvider = botProvider;
+            _itmoProvider = itmoProvider;
         }
 
         public string CommandName { get; } = "Schedule";
         public string Description { get; } = "Get a group command from bot settings";
-        public string[] Args { get; } = { };
+        public string[] Args { get; } = { "GroupNumber:optional", "DateTime:optional" };
 
         public bool CanExecute(CommandArgumentContainer args)
         {
@@ -34,8 +34,8 @@ namespace ItmoSchedule.BotFramework.Commands.BotCommands
         public CommandExecuteResult Execute(CommandArgumentContainer args)
         {
             using var dbContext = new DatabaseContext();
-            string groupName;
-            DateTime dateTime = DateTime.Today;
+            string groupName = string.Empty;
+            var dateTime = DateTime.Today;
 
             switch (args.Arguments.Count)
             {
@@ -43,13 +43,21 @@ namespace ItmoSchedule.BotFramework.Commands.BotCommands
                     groupName = dbContext.GroupSettings.Find(args.Sender.GroupId.ToString()).GroupNumber;
                     break;
                 case 1:
-                    groupName = args.Arguments.FirstOrDefault();
+                    var groupNameOrDateTime = args.Arguments.FirstOrDefault();
+                    var result = DateTime.TryParse(groupNameOrDateTime, out DateTime time);
+                    if (result == false)
+                        groupName = groupNameOrDateTime;
+                    else
+                    {
+                        dateTime = time;
+                        groupName = dbContext.GroupSettings.Find(args.Sender.GroupId.ToString()).GroupNumber;
+                    }
                     break;
-
                 case 2:
                     groupName = args.Arguments.FirstOrDefault();
                     var dateTimeResult = DateTime.TryParse(args.Arguments.Last(), out dateTime);
                     if (dateTimeResult == false) return new CommandExecuteResult(false, "invalid date");
+                    Logger.Message(dateTime.ToShortDateString());
                     break;
 
                 default: return new CommandExecuteResult(false, "invalid arguments");
@@ -67,11 +75,16 @@ namespace ItmoSchedule.BotFramework.Commands.BotCommands
 
                 var schedule = scheduleTask.Result.Schedule.GetDaySchedule(scheduleDateTime, DateConvertorService.FirstWeekEven);
 
-                var result = string.Join(Environment.NewLine,
-                    schedule.Select(lesson => lesson.StartTime + " " + lesson.SubjectTitle));
+                var result = "Schedule on " +
+                             scheduleDateTime.ToShortDateString() +
+                             Environment.NewLine +
+                             Environment.NewLine;
 
-                if (result == string.Empty)
-                    result = "There is nothing here";
+                if (schedule.Count == 0)
+                    result += "Chilling time 👌🏻👌🏻👌🏻";
+                else
+                    result += string.Join(Environment.NewLine,
+                    schedule.Select(lesson => "📌" + lesson.StartTime + "->" + lesson.SubjectTitle + $"({lesson.Status})" + " " + Environment.NewLine + lesson.Place + Environment.NewLine));
 
                 return new CommandExecuteResult(true, result);
             }

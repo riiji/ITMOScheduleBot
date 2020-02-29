@@ -79,7 +79,7 @@ namespace ITMOSchedule.VK
 
             _client.OnMessageNew += Client_OnMessageNew;
 
-            Logger.Info("Auth successfully");
+            Logger.Message( "Auth successfully");
         }
 
  

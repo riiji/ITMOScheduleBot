@@ -7,13 +7,7 @@ namespace ItmoSchedule.Tools
     {
         static Logger()
         {
-            bool isFile = false;
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            if (isFile)
-                // ReSharper disable once HeuristicUnreachableCode
-                Log = new FileLogger("debug-file-log.log");
-            else
-                Log = new DebugLogger();
+            Log = new ConsoleLogger();
 
             Message($"[SYS] Start new session {DateTime.Now:G}");
         }

@@ -1,11 +1,11 @@
 ﻿using System;
 using ItmoSchedule.BotFramework.Commands;
-using ItmoSchedule.BotFramework.Commands.List;
 using ItmoSchedule.BotFramework.Exceptions;
 using ItmoSchedule.BotFramework.Interfaces;
 using ITMOSchedule.Common;
 using ITMOSchedule.Extensions;
 using ItmoSchedule.Tools;
+using ITMOSchedule.VK;
 using ItmoScheduleApiWrapper;
 
 namespace ItmoSchedule.BotFramework
@@ -18,7 +18,8 @@ namespace ItmoSchedule.BotFramework
 
         public Bot(IBotApiProvider botProvider)
         {
-            _botProvider = botProvider ?? throw new BotValidException("Api provider not founded");
+            _botProvider = botProvider;
+
             _itmoProvider = new ItmoApiProvider();
         }
 
@@ -30,20 +31,23 @@ namespace ItmoSchedule.BotFramework
 
         private void ApiProviderOnMessage(object sender, BotEventArgs e)
         {
-            CommandArgumentContainer commandWithArgs = Utilities.ParseCommand(e.Text, e.GroupId).Result;
-
-            if (!_commandHandler.IsCommandCorrect(commandWithArgs))
+            try
             {
-                Logger.Info($"Command {commandWithArgs.CommandName} isn't corrected");
-                _botProvider.WriteMessage(commandWithArgs.Sender.GroupId, "invalid command args");
-                return;
-            }
-            
-            var commandExecuteTask = _commandHandler.ExecuteCommand(commandWithArgs);
-            commandExecuteTask.WaitSafe();
+                CommandArgumentContainer commandWithArgs = Utilities.ParseCommand(e.Text, e.GroupId).Result;
 
-            if (commandExecuteTask.IsFaulted)
-                Logger.Warning(commandExecuteTask.Exception.Message);
+                if (!_commandHandler.IsCommandCorrect(commandWithArgs))
+                    return;
+
+                var commandExecuteTask = _commandHandler.ExecuteCommand(commandWithArgs);
+                commandExecuteTask.WaitSafe();
+
+                if (commandExecuteTask.IsFaulted)
+                    Logger.Warning(commandExecuteTask.Exception.Message);
+            }
+            catch (Exception error)
+            {
+                Logger.Warning(error.Message);
+            }
         }
 
         public void Dispose()

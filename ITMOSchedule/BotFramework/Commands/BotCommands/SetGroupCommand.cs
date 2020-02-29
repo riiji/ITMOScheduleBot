@@ -3,14 +3,13 @@ using ItmoSchedule.BotFramework.Interfaces;
 using ITMOSchedule.Common;
 using ItmoSchedule.Database;
 using ItmoSchedule.Database.Models;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using ITMOSchedule.VK;
 
-namespace ItmoSchedule.BotFramework.Commands.List
+namespace ItmoSchedule.BotFramework.Commands.BotCommands
 {
     public class SetGroupCommand : IBotCommand
     {
         private readonly IBotApiProvider _botProvider;
-
         public SetGroupCommand(IBotApiProvider botProvider)
         {
             _botProvider = botProvider;
@@ -21,20 +20,6 @@ namespace ItmoSchedule.BotFramework.Commands.List
         public string[] Args { get; } = {"GroupNumber"};
         public bool CanExecute(CommandArgumentContainer args)
         {
-            if (args.Arguments.Count != Args.Length)
-            {
-                _botProvider.WriteMessage(args.Sender.GroupId, "invalid arguments count");
-                return false;
-            }
-
-            string groupNumber = args.Arguments.FirstOrDefault();
-
-            if (groupNumber != null && groupNumber.Length != Utilities.GroupNameLength)
-            {
-                _botProvider.WriteMessage(args.Sender.GroupId, "invalid group number");
-                return false;
-            }
-
             return true;
         }
 
