@@ -15,6 +15,7 @@ namespace ItmoSchedule.BotFramework.Commands
 
         public Task<IBotCommand> GetCommand(string commandName)
         {
+            //TODO: remove task, replace with Result
             return Commands.TryGetValue(commandName, out IBotCommand command) 
                 ? Task.FromResult(command) 
                 : Task.FromException<IBotCommand>(new BotValidException("Command not founded"));

@@ -14,17 +14,18 @@ namespace ItmoSchedule.BotFramework.Commands
         private readonly IBotApiProvider _botProvider;
         private readonly ItmoApiProvider _itmoProvider;
 
-        public CommandHandler(CommandsList commands, IBotApiProvider botProvider, ItmoApiProvider itmoProvider)
+        public CommandHandler(CommandsList commands, IBotApiProvider botProvider)
         {
             _commands = commands;
             _botProvider = botProvider;
-            _itmoProvider = itmoProvider;
+            _itmoProvider = new ItmoApiProvider();
 
             RegisterCommands();
         }
 
         public bool IsCommandCorrect(CommandArgumentContainer userCommand)
         {
+            //TODO: change var settings
             var commandTask = _commands.GetCommand(userCommand.CommandName);
             commandTask.WaitSafe();
 
@@ -33,6 +34,7 @@ namespace ItmoSchedule.BotFramework.Commands
 
             IBotCommand command = commandTask.Result;
 
+            //TODO: log that command wasn't execute
             return command.CanExecute(userCommand);
         }
 

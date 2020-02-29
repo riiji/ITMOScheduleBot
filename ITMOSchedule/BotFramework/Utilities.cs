@@ -16,7 +16,7 @@ namespace ItmoSchedule.BotFramework
             return Random.Next();
         }
 
-        public static Task<CommandArgumentContainer> ParseCommand(string commandsWithArgs, int groupId)
+        public static CommandArgumentContainer ParseCommand(string commandsWithArgs, int groupId)
         {
             var commands = commandsWithArgs.Split();
 
@@ -25,7 +25,7 @@ namespace ItmoSchedule.BotFramework
             // skip command name
             var args = commands.Skip(1);
 
-            return Task.FromResult(new CommandArgumentContainer(commandName, new SenderData(groupId), args.ToList()));
+            return new CommandArgumentContainer(commandName, new SenderData(groupId), args.ToList());
         }
     }
 
