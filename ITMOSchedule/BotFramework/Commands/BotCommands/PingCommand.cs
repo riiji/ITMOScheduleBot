@@ -25,9 +25,7 @@ namespace ItmoSchedule.BotFramework.Commands.List
 
         public CommandExecuteResult Execute(CommandArgumentContainer args)
         {
-            _provider.WriteMessage(args.GroupId, "Pong");
-
-            return new CommandExecuteResult(true);
+            return new CommandExecuteResult(true, "Pong");
         }
     }
 }

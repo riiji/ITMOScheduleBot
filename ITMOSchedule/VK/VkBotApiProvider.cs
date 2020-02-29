@@ -2,6 +2,7 @@
 using ItmoSchedule.BotFramework;
 using ItmoSchedule.BotFramework.Interfaces;
 using ITMOSchedule.Extensions;
+using ItmoSchedule.Tools;
 using ItmoSchedule.VK;
 using VkApi.Wrapper;
 using VkApi.Wrapper.Auth;
@@ -43,7 +44,7 @@ namespace ITMOSchedule.VK
                 if (result.Exception.InnerException is ApiException)
                     Auth();
 
-                Utilities.Log(Utilities.LogLevel.Error, $"WriteMessage exception {result.Exception}");
+                Logger.Error($"WriteMessage exception {result.Exception}");
             }
         }
 
@@ -70,7 +71,7 @@ namespace ITMOSchedule.VK
 
             if (clientTask.IsFaulted)
             {
-                Utilities.Log(Utilities.LogLevel.Error, clientTask.Exception.Message);
+                Logger.Error(clientTask.Exception.Message);
                 return;
             }
 
@@ -78,7 +79,7 @@ namespace ITMOSchedule.VK
 
             _client.OnMessageNew += Client_OnMessageNew;
 
-            Utilities.Log(Utilities.LogLevel.Info, "Auth successfully");
+            Logger.Info("Auth successfully");
         }
 
  

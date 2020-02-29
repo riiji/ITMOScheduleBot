@@ -33,8 +33,7 @@ namespace ItmoSchedule.BotFramework.Commands.List
                         $"{commands.Value.CommandName} : {commands.Value.Description}, {Environment.NewLine}args: " +
                         $"{string.Join(", ", commands.Value.Args.Select(s=>s))}"));
 
-            _provider.WriteMessage(args.GroupId, result);
-            return new CommandExecuteResult(true);
+            return new CommandExecuteResult(true, result);
         }
     }
 }

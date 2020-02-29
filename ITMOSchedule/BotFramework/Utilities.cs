@@ -25,21 +25,8 @@ namespace ItmoSchedule.BotFramework
             // skip command name
             var args = commands.Skip(1);
 
-            return Task.FromResult(new CommandArgumentContainer(groupId, args.ToList(), commandName));
+            return Task.FromResult(new CommandArgumentContainer(commandName, new SenderData(groupId), args.ToList()));
         }
-
-        public enum LogLevel
-        {
-            Info,
-            Warning,
-            Error
-        }
-
-        public static void Log(LogLevel level, string message)
-        {
-            Console.WriteLine($"{DateTime.Now} | {level} : {message}");
-        }
-
     }
 
 }

@@ -33,14 +33,12 @@ namespace ItmoSchedule.BotFramework.Commands
 
             IBotCommand command = commandTask.Result;
 
-            return command.CanExecute(new CommandArgumentContainer(0, userCommand.Arguments, userCommand.CommandName));
+            return command.CanExecute(userCommand);
         }
 
         public void RegisterCommands()
         {
             _commands.AddCommand(new PingCommand(_botProvider));
-            _commands.AddCommand(new GetGroupScheduleCommand(_botProvider, _itmoProvider));
-            _commands.AddCommand(new GetTodayGroupScheduleCommand(_botProvider, _itmoProvider));
             _commands.AddCommand(new HelpCommand(_botProvider, _commands));
             _commands.AddCommand(new SetGroupCommand(_botProvider));
             _commands.AddCommand(new ScheduleCommand(_botProvider, _itmoProvider));
@@ -56,6 +54,7 @@ namespace ItmoSchedule.BotFramework.Commands
 
             IBotCommand command = commandTask.Result;
             CommandExecuteResult commandExecuteResult = command.Execute(args);
+            _botProvider.WriteMessage(args.Sender.GroupId, commandExecuteResult.ExecuteMessage);
 
             return Task.FromResult(commandExecuteResult);
         }

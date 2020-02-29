@@ -5,6 +5,7 @@ using ItmoSchedule.BotFramework.Exceptions;
 using ItmoSchedule.BotFramework.Interfaces;
 using ITMOSchedule.Common;
 using ITMOSchedule.Extensions;
+using ItmoSchedule.Tools;
 using ItmoScheduleApiWrapper;
 
 namespace ItmoSchedule.BotFramework
@@ -33,8 +34,8 @@ namespace ItmoSchedule.BotFramework
 
             if (!_commandHandler.IsCommandCorrect(commandWithArgs))
             {
-                Utilities.Log(Utilities.LogLevel.Info, $"Command {commandWithArgs.CommandName} isnt corrected");
-                _botProvider.WriteMessage(commandWithArgs.GroupId, "invalid command args");
+                Logger.Info($"Command {commandWithArgs.CommandName} isn't corrected");
+                _botProvider.WriteMessage(commandWithArgs.Sender.GroupId, "invalid command args");
                 return;
             }
             
@@ -42,7 +43,7 @@ namespace ItmoSchedule.BotFramework
             commandExecuteTask.WaitSafe();
 
             if (commandExecuteTask.IsFaulted)
-                Utilities.Log(Utilities.LogLevel.Warning, $"Error: {commandExecuteTask.Exception}");
+                Logger.Warning(commandExecuteTask.Exception.Message);
         }
 
         public void Dispose()

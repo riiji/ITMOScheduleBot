@@ -23,7 +23,7 @@ namespace ItmoSchedule.BotFramework.Commands.List
         {
             if (args.Arguments.Count != Args.Length)
             {
-                _botProvider.WriteMessage(args.GroupId, "invalid arguments count");
+                _botProvider.WriteMessage(args.Sender.GroupId, "invalid arguments count");
                 return false;
             }
 
@@ -31,7 +31,7 @@ namespace ItmoSchedule.BotFramework.Commands.List
 
             if (groupNumber != null && groupNumber.Length != Utilities.GroupNameLength)
             {
-                _botProvider.WriteMessage(args.GroupId, "invalid group number");
+                _botProvider.WriteMessage(args.Sender.GroupId, "invalid group number");
                 return false;
             }
 
@@ -42,15 +42,15 @@ namespace ItmoSchedule.BotFramework.Commands.List
         {
             using var dbContext = new DatabaseContext();
 
-            var oldSetting = dbContext.GroupSettings.Find(args.GroupId.ToString());
+            var oldSetting = dbContext.GroupSettings.Find(args.Sender.GroupId.ToString());
 
             if (oldSetting != null)
                 dbContext.GroupSettings.Remove(oldSetting);
              
-            dbContext.GroupSettings.Add(new GroupSettings(args.GroupId.ToString(), args.Arguments.FirstOrDefault()));
+            dbContext.GroupSettings.Add(new GroupSettings(args.Sender.GroupId.ToString(), args.Arguments.FirstOrDefault()));
             dbContext.SaveChanges();
 
-            return new CommandExecuteResult(true);
+            return new CommandExecuteResult(true, "ok");
         }
     }
 }

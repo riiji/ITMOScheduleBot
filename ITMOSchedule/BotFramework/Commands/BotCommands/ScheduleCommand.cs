@@ -14,7 +14,7 @@ namespace ItmoSchedule.BotFramework.Commands.BotCommands
     public class ScheduleCommand : IBotCommand
     {
         private IBotApiProvider _botProvider;
-        private ItmoApiProvider _itmoProvider;
+        private readonly ItmoApiProvider _itmoProvider;
 
         public ScheduleCommand(IBotApiProvider botProvider, ItmoApiProvider itmoProvider)
         {
@@ -35,36 +35,27 @@ namespace ItmoSchedule.BotFramework.Commands.BotCommands
         {
             using var dbContext = new DatabaseContext();
             string groupName;
+            DateTime dateTime = DateTime.Today;
 
             switch (args.Arguments.Count)
             {
                 case 0:
-
-                    try
-                    {
-                        groupName = dbContext.GroupSettings.Find(args.GroupId.ToString()).GroupNumber;
-                    }
-                    catch (Exception e)
-                    {
-                        return new CommandExecuteResult(false, e.Message);
-                    }
-
-                    return InnerExecute(groupName, DateTime.Today);
-
+                    groupName = dbContext.GroupSettings.Find(args.Sender.GroupId.ToString()).GroupNumber;
+                    break;
                 case 1:
                     groupName = args.Arguments.FirstOrDefault();
-                    return InnerExecute(groupName, DateTime.Today);
+                    break;
 
                 case 2:
                     groupName = args.Arguments.FirstOrDefault();
-
-                    var dateTimeResult = DateTime.TryParse(args.Arguments.Last(), out DateTime time);
+                    var dateTimeResult = DateTime.TryParse(args.Arguments.Last(), out dateTime);
                     if (dateTimeResult == false) return new CommandExecuteResult(false, "invalid date");
-
-                    return InnerExecute(args.Arguments.FirstOrDefault(), time);
+                    break;
 
                 default: return new CommandExecuteResult(false, "invalid arguments");
             }
+
+            return InnerExecute(groupName, dateTime);
 
             CommandExecuteResult InnerExecute(string groupName, DateTime scheduleDateTime)
             {
@@ -72,7 +63,7 @@ namespace ItmoSchedule.BotFramework.Commands.BotCommands
                 scheduleTask.WaitSafe();
 
                 if (scheduleTask.IsFaulted)
-                    return new CommandExecuteResult(false);
+                    return new CommandExecuteResult(false, "invalid group number");
 
                 var schedule = scheduleTask.Result.Schedule.GetDaySchedule(scheduleDateTime, DateConvertorService.FirstWeekEven);
 
@@ -82,9 +73,7 @@ namespace ItmoSchedule.BotFramework.Commands.BotCommands
                 if (result == string.Empty)
                     result = "There is nothing here";
 
-                _botProvider.WriteMessage(args.GroupId, result);
-
-                return new CommandExecuteResult(true);
+                return new CommandExecuteResult(true, result);
             }
         }
     }
