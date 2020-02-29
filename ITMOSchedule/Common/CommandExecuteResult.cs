@@ -1,4 +1,6 @@
-﻿namespace ITMOSchedule.Common
+﻿using System;
+
+namespace ITMOSchedule.Common
 {
     public class CommandExecuteResult
     {
@@ -7,6 +9,13 @@
             IsSuccess = isSuccess;
         }
 
+        public CommandExecuteResult(bool isSuccess, string executeMessage)
+        {
+            IsSuccess = isSuccess;
+            ExecuteMessage = executeMessage;
+        }
+
+        public string ExecuteMessage { get; } = string.Empty;
         public bool IsSuccess { get; }
     }
 }

@@ -33,38 +33,51 @@ namespace ItmoSchedule.BotFramework.Commands.BotCommands
 
         public CommandExecuteResult Execute(CommandArgumentContainer args)
         {
+            using var dbContext = new DatabaseContext();
+            string groupName;
+
             switch (args.Arguments.Count)
             {
-                case 0: return InnerExecute(groupId: args.GroupId.ToString());
-                case 1: return InnerExecute(args.Arguments.FirstOrDefault());
+                case 0:
+
+                    try
+                    {
+                        groupName = dbContext.GroupSettings.Find(args.GroupId.ToString()).GroupNumber;
+                    }
+                    catch (Exception e)
+                    {
+                        return new CommandExecuteResult(false, e.Message);
+                    }
+
+                    return InnerExecute(groupName, DateTime.Today);
+
+                case 1:
+                    groupName = args.Arguments.FirstOrDefault();
+                    return InnerExecute(groupName, DateTime.Today);
+
                 case 2:
+                    groupName = args.Arguments.FirstOrDefault();
+
                     var dateTimeResult = DateTime.TryParse(args.Arguments.Last(), out DateTime time);
-                    if (dateTimeResult == false) return new CommandExecuteResult(false);
+                    if (dateTimeResult == false) return new CommandExecuteResult(false, "invalid date");
+
                     return InnerExecute(args.Arguments.FirstOrDefault(), time);
-                
+
                 default: return new CommandExecuteResult(false);
             }
 
-            CommandExecuteResult InnerExecute(string groupName = null, DateTime? scheduleDateTime = null, string groupId = null)
+            CommandExecuteResult InnerExecute(string groupName, DateTime scheduleDateTime)
             {
-                using var dbContext = new DatabaseContext();
-                
-                // if groupName is null, then trying to find groupNumber from Db
-                string group = groupName ?? dbContext.GroupSettings.Find(groupId).GroupNumber;
-
-                if (group == null)
+                if (groupName == null)
                     return new CommandExecuteResult(false);
 
-                var scheduleTask = _itmoProvider.ScheduleApi.GetGroupSchedule(group);
+                var scheduleTask = _itmoProvider.ScheduleApi.GetGroupSchedule(groupName);
                 scheduleTask.WaitSafe();
 
                 if (scheduleTask.IsFaulted)
                     return new CommandExecuteResult(false);
 
-                // if schedule date time is null, then get today, if not, take schedule via date
-                var schedule = scheduleDateTime == null 
-                    ? scheduleTask.Result.Schedule.GetTodaySchedule(DateConvertorService.FirstWeekEven) 
-                    : scheduleTask.Result.Schedule.GetDaySchedule(scheduleDateTime.Value, DateConvertorService.FirstWeekEven);
+                var schedule = scheduleTask.Result.Schedule.GetDaySchedule(scheduleDateTime, DateConvertorService.FirstWeekEven);
 
                 var result = string.Join(Environment.NewLine,
                     schedule.Select(lesson => lesson.StartTime + " " + lesson.SubjectTitle));
