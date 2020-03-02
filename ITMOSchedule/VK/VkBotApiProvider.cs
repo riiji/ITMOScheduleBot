@@ -41,6 +41,8 @@ namespace ITMOSchedule.VK
 
             if (result.IsFaulted)
             {
+                //TODO: unsubscribe from event on recall auth
+                //TODO: log reauth
                 if (result.Exception.InnerException is ApiException)
                     Auth();
 
@@ -54,6 +56,8 @@ namespace ITMOSchedule.VK
             _vkApi?.Dispose();
         }
 
+        //TODO: rename
+        //TODO: return true/false om success/fail
         public void Auth()
         {
             AccessToken accessToken = AccessToken.FromString(_settings.Key);
@@ -71,6 +75,7 @@ namespace ITMOSchedule.VK
 
             if (clientTask.IsFaulted)
             {
+                //TODO: Logger.Error($"Failed to process Auth, handle exception:\n{clientTask.Exception.Message}"
                 Logger.Error(clientTask.Exception.Message);
                 return;
             }

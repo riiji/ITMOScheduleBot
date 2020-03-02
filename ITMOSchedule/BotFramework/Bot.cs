@@ -14,18 +14,15 @@ namespace ItmoSchedule.BotFramework
     {
         private CommandHandler _commandHandler;
         private readonly IBotApiProvider _botProvider;
-        private readonly ItmoApiProvider _itmoProvider;
 
         public Bot(IBotApiProvider botProvider)
         {
             _botProvider = botProvider;
-
-            _itmoProvider = new ItmoApiProvider();
         }
 
         public void Process()
         {
-            _commandHandler = new CommandHandler(new CommandsList(), _botProvider, _itmoProvider);
+            _commandHandler = new CommandHandler(new CommandsList(), _botProvider);
             _botProvider.OnMessage += ApiProviderOnMessage;
         }
 
@@ -33,11 +30,13 @@ namespace ItmoSchedule.BotFramework
         {
             try
             {
-                CommandArgumentContainer commandWithArgs = Utilities.ParseCommand(e.Text, e.GroupId).Result;
+                CommandArgumentContainer commandWithArgs = Utilities.ParseCommand(e.Text, e.GroupId);
 
                 if (!_commandHandler.IsCommandCorrect(commandWithArgs))
                     return;
 
+                //TODO: log with info level executing
+                Logger.Info(commandWithArgs.ToString());
                 var commandExecuteTask = _commandHandler.ExecuteCommand(commandWithArgs);
                 commandExecuteTask.WaitSafe();
 
@@ -46,7 +45,7 @@ namespace ItmoSchedule.BotFramework
             }
             catch (Exception error)
             {
-                Logger.Warning(error.Message);
+                Logger.Error(error.Message);
             }
         }
 
