@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace ITMOSchedule.Extensions
+namespace ItmoSchedule.Tools.Extensions
 {
-    public static class Extensions
+    public static class ItmoScheduleBotExtensions
     {
         public static void WaitSafe(this Task task)
         {

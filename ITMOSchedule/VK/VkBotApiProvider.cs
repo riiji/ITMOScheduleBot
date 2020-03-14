@@ -1,8 +1,9 @@
 ﻿using System;
+using ItmoSchedule.Abstractions;
 using ItmoSchedule.BotFramework;
-using ItmoSchedule.BotFramework.Interfaces;
-using ITMOSchedule.Extensions;
-using ItmoSchedule.Tools;
+using ItmoSchedule.Common;
+using ItmoSchedule.Tools.Extensions;
+using ItmoSchedule.Tools.Loggers;
 using ItmoSchedule.VK;
 using VkApi.Wrapper;
 using VkApi.Wrapper.Auth;
@@ -29,26 +30,6 @@ namespace ITMOSchedule.VK
         {
             OnMessage?.Invoke(sender, new BotEventArgs(e.Text, e.PeerId,e.FromId));
         }
-        
-        public void WriteMessage(int groupId, string message)
-        {
-            var result = _vkApi.Messages.Send(
-                randomId: Utilities.GetRandom(),
-                peerId: groupId,
-                message: message);
-            
-            result.WaitSafe();
-
-            if (result.IsFaulted)
-            {
-                //TODO: unsubscribe from event on recall auth
-                //TODO: log reauth
-                if (result.Exception.InnerException is ApiException)
-                    Auth();
-
-                Logger.Error($"WriteMessage exception {result.Exception}");
-            }
-        }
 
         public void Dispose()
         {
@@ -56,9 +37,7 @@ namespace ITMOSchedule.VK
             _vkApi?.Dispose();
         }
 
-        //TODO: rename
-        //TODO: return true/false om success/fail
-        public void Auth()
+        public TaskExecuteResult Initialize()
         {
             AccessToken accessToken = AccessToken.FromString(_settings.Key);
             _vkApi = new Vkontakte(_settings.AppId, _settings.AppSecret) { AccessToken = accessToken };
@@ -75,18 +54,21 @@ namespace ITMOSchedule.VK
 
             if (clientTask.IsFaulted)
             {
-                //TODO: Logger.Error($"Failed to process Auth, handle exception:\n{clientTask.Exception.Message}"
-                Logger.Error(clientTask.Exception.Message);
-                return;
+                Logger.Error($"Failed to process Auth, handle exception:{clientTask.Exception.Message}");
+
+                return new TaskExecuteResult(false, "Auth is failed").WithException(clientTask.Exception);
             }
 
             _client = clientTask.Result;
 
             _client.OnMessageNew += Client_OnMessageNew;
 
-            Logger.Message( "Auth successfully");
+            return new TaskExecuteResult(true, "Auth successfully");
         }
 
- 
+        public Vkontakte GetApi()
+        {
+            return _vkApi;
+        }
     }
 }

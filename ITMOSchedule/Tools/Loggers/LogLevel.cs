@@ -1,4 +1,4 @@
-﻿namespace ItmoSchedule.Tools
+﻿namespace ItmoSchedule.Tools.Loggers
 {
     public enum LogLevel
     {

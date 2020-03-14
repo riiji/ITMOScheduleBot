@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ITMOSchedule.Common
+namespace ItmoSchedule.Common
 {
     public class CommandArgumentContainer
     {

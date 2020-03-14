@@ -1,4 +1,4 @@
-﻿namespace ITMOSchedule.Common
+﻿namespace ItmoSchedule.Common
 {
     public class SenderData
     {

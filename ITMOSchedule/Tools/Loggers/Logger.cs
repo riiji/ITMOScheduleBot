@@ -1,9 +1,8 @@
 ﻿using System;
-using ItmoSchedule.Tools.Loggers;
 
-namespace ItmoSchedule.Tools
+namespace ItmoSchedule.Tools.Loggers
 {
-    public class Logger
+    public static class Logger
     {
         static Logger()
         {
@@ -12,8 +11,8 @@ namespace ItmoSchedule.Tools
             Message($"[SYS] Start new session {DateTime.Now:G}");
         }
 
-        public static readonly ILogger Log;
-        public static readonly LogLevel LogLevel = LogLevel.Message;
+        private static readonly ILogger Log;
+        private static readonly LogLevel LogLevel = LogLevel.Message;
 
         public static void Info(string message) => InternalWrite(message, LogLevel.Info);
         public static void Message(string message) => InternalWrite(message, LogLevel.Message);

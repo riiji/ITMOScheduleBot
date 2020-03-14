@@ -11,10 +11,10 @@ namespace ItmoSchedule.BotFramework
             UserSenderId = userSenderId;
         }
 
-        public string Text { get; set; }
+        public string Text { get; }
 
-        public int GroupId { get; set; }
+        public int GroupId { get; }
 
-        public int UserSenderId { get; set; }
+        public int UserSenderId { get; }
     }
 }

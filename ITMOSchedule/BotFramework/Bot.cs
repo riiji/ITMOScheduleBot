@@ -1,28 +1,33 @@
 ﻿using System;
-using ItmoSchedule.BotFramework.Commands;
-using ItmoSchedule.BotFramework.Exceptions;
-using ItmoSchedule.BotFramework.Interfaces;
-using ITMOSchedule.Common;
-using ITMOSchedule.Extensions;
-using ItmoSchedule.Tools;
-using ITMOSchedule.VK;
-using ItmoScheduleApiWrapper;
+using ItmoSchedule.Abstractions;
+using ItmoSchedule.BotCommands;
+using ItmoSchedule.BotFramework.CommandControllers;
+using ItmoSchedule.Common;
+using ItmoSchedule.Tools.Loggers;
 
 namespace ItmoSchedule.BotFramework
 {
     public class Bot : IDisposable
     {
-        private CommandHandler _commandHandler;
+        private readonly CommandHandler _commandHandler;
         private readonly IBotApiProvider _botProvider;
+        private readonly IWriteMessage _messageWriter;
 
-        public Bot(IBotApiProvider botProvider)
+        public Bot(IBotApiProvider botProvider, IWriteMessage messageWriter)
         {
             _botProvider = botProvider;
+            _messageWriter = messageWriter;
+
+            _commandHandler = new CommandHandler(new CommandsList());
+            
+            _commandHandler.RegisterCommand(new PingCommand());
+            _commandHandler.RegisterCommand(new HelpCommand(_commandHandler.GetCommands()));
+            _commandHandler.RegisterCommand(new ScheduleCommand());
+            _commandHandler.RegisterCommand(new SetGroupCommand());
         }
 
         public void Process()
         {
-            _commandHandler = new CommandHandler(new CommandsList(), _botProvider);
             _botProvider.OnMessage += ApiProviderOnMessage;
         }
 
@@ -32,16 +37,25 @@ namespace ItmoSchedule.BotFramework
             {
                 CommandArgumentContainer commandWithArgs = Utilities.ParseCommand(e.Text, e.GroupId);
 
-                if (!_commandHandler.IsCommandCorrect(commandWithArgs))
+                var commandTaskResult = _commandHandler.IsCommandCorrect(commandWithArgs);
+
+                Logger.Info(commandTaskResult.ExecuteMessage);
+
+                if (!commandTaskResult.IsSuccess)
                     return;
 
-                //TODO: log with info level executing
-                Logger.Info(commandWithArgs.ToString());
-                var commandExecuteTask = _commandHandler.ExecuteCommand(commandWithArgs);
-                commandExecuteTask.WaitSafe();
+                var commandExecuteResult = _commandHandler.ExecuteCommand(commandWithArgs);
 
-                if (commandExecuteTask.IsFaulted)
-                    Logger.Warning(commandExecuteTask.Exception.Message);
+                if (!commandExecuteResult.IsSuccess)
+                    Logger.Warning(commandExecuteResult.ExecuteMessage);
+
+                var writeMessageResult = _messageWriter.WriteMessage(new SenderData(e.GroupId), commandExecuteResult.ExecuteMessage);
+
+                Logger.Info(writeMessageResult.ExecuteMessage);
+                if(writeMessageResult.GetException()!=null)
+                {
+                    _botProvider.Initialize();
+                }
             }
             catch (Exception error)
             {
