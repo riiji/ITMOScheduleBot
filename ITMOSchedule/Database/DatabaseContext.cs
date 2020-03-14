@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ItmoSchedule.Database.Models;
+using Microsoft.Data.Sqlite;
 
 namespace ItmoSchedule.Database
 {
@@ -11,8 +12,11 @@ namespace ItmoSchedule.Database
         public DbSet<GroupSettings> GroupSettings { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(
-                @"Server=(localdb)\mssqllocaldb;Database=ITMOScheduleBot;Integrated Security=True");
+            var connectionStringBuilder = new SqliteConnectionStringBuilder { DataSource = "MyDb.db" };
+            var connectionString = connectionStringBuilder.ToString();
+            var connection = new SqliteConnection(connectionString);
+
+            optionsBuilder.UseSqlite(connection);
         }
     }
 }
