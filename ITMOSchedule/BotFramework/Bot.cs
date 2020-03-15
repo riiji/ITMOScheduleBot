@@ -19,7 +19,7 @@ namespace ItmoSchedule.BotFramework
             _messageWriter = messageWriter;
 
             _commandHandler = new CommandHandler(new CommandsList());
-            
+
             _commandHandler.RegisterCommand(new PingCommand());
             _commandHandler.RegisterCommand(new HelpCommand(_commandHandler.GetCommands()));
             _commandHandler.RegisterCommand(new ScheduleCommand());
@@ -33,6 +33,7 @@ namespace ItmoSchedule.BotFramework
 
         private void ApiProviderOnMessage(object sender, BotEventArgs e)
         {
+            TaskExecuteResult commandExecuteResult = new TaskExecuteResult(true);
             try
             {
                 CommandArgumentContainer commandWithArgs = Utilities.ParseCommand(e.Text, e.GroupId);
@@ -44,22 +45,22 @@ namespace ItmoSchedule.BotFramework
                 if (!commandTaskResult.IsSuccess)
                     return;
 
-                var commandExecuteResult = _commandHandler.ExecuteCommand(commandWithArgs);
+                commandExecuteResult = _commandHandler.ExecuteCommand(commandWithArgs);
 
                 if (!commandExecuteResult.IsSuccess)
                     Logger.Warning(commandExecuteResult.ExecuteMessage);
-
-                var writeMessageResult = _messageWriter.WriteMessage(new SenderData(e.GroupId), commandExecuteResult.ExecuteMessage);
-
-                Logger.Info(writeMessageResult.ExecuteMessage);
-                if(writeMessageResult.GetException()!=null)
-                {
-                    _botProvider.Initialize();
-                }
             }
             catch (Exception error)
             {
                 Logger.Error(error.Message);
+            }
+
+            var writeMessageResult = _messageWriter.WriteMessage(new SenderData(e.GroupId), commandExecuteResult.ExecuteMessage);
+
+            Logger.Info(writeMessageResult.ExecuteMessage);
+            if (writeMessageResult.GetException() != null)
+            {
+                _botProvider.Initialize();
             }
         }
 
