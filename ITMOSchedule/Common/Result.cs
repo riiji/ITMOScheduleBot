@@ -2,19 +2,19 @@
 
 namespace ItmoSchedule.Common
 {
-    public class TaskExecuteResult<T> : TaskExecuteResult
+    public class Result<T> : TaskExecuteResult
     {
-        public TaskExecuteResult(bool isSuccess, T result) : base(isSuccess)
+        public Result(bool isSuccess, T result) : base(isSuccess)
         {
-            Result = result;
+            Value = result;
         }
 
-        public TaskExecuteResult(bool isSuccess, string executeMessage, T result) : base(isSuccess, executeMessage)
+        public Result(bool isSuccess, string executeMessage, T result) : base(isSuccess, executeMessage)
         {
-            Result = result;
+            Value = result;
         }
 
-        public readonly T Result;
+        public readonly T Value;
     }
 
     public class TaskExecuteResult

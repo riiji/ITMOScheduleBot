@@ -20,7 +20,7 @@ namespace ItmoSchedule.BotFramework.CommandControllers
             if(!commandTask.IsSuccess)
                 return commandTask;
 
-            var command = commandTask.Result;
+            var command = commandTask.Value;
 
             if(command.CanExecute(args))
                 return new TaskExecuteResult(true, "ok");
@@ -38,12 +38,12 @@ namespace ItmoSchedule.BotFramework.CommandControllers
 
         public TaskExecuteResult ExecuteCommand(CommandArgumentContainer args)
         {
-            TaskExecuteResult<IBotCommand> commandTask = _commands.GetCommand(args.CommandName);
+            Result<IBotCommand> commandTask = _commands.GetCommand(args.CommandName);
 
             if (!commandTask.IsSuccess)
                 return commandTask;
 
-            var command = commandTask.Result;
+            var command = commandTask.Value;
             var commandExecuteResult = command.Execute(args);
             
             return commandExecuteResult;

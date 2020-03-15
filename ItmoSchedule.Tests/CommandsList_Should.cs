@@ -25,7 +25,7 @@ namespace ItmoSchedule.Tests
         {
             _commands.AddCommand(_fakeCommand);
             _commands.GetCommand("someCommand").IsSuccess.Should().Be(true);
-            _commands.GetCommand("someCommand").Result.Should().Be(_fakeCommand);
+            _commands.GetCommand("someCommand").Value.Should().Be(_fakeCommand);
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace ItmoSchedule.Tests
             _commands.AddCommand(_fakeCommand);
 
             _commands.GetCommand("someCommand").IsSuccess.Should().Be(true);
-            _commands.GetCommand("someCommand").Result.Should().Be(_fakeCommand);
+            _commands.GetCommand("someCommand").Value.Should().Be(_fakeCommand);
         }
 
         [Test]
@@ -52,17 +52,17 @@ namespace ItmoSchedule.Tests
             _commands.AddCommand(_fakeCommand);
 
             _commands.GetCommand("someCommand3").IsSuccess.Should().Be(true);
-            _commands.GetCommand("someCommand3").Result.Should().Be(_fakeCommand);
+            _commands.GetCommand("someCommand3").Value.Should().Be(_fakeCommand);
             
             _commands.GetCommand("someCommand1").IsSuccess.Should().Be(true);
-            _commands.GetCommand("someCommand1").Result.Should().Be(_fakeCommand);
+            _commands.GetCommand("someCommand1").Value.Should().Be(_fakeCommand);
         }
 
         [Test]
         public void RegisterCommand_ReturnsNull_WhenGetInvalidCommand()
         {
             _commands.GetCommand("someCommand").IsSuccess.Should().Be(false);
-            _commands.GetCommand("someCommand").Result.Should().BeNull();
+            _commands.GetCommand("someCommand").Value.Should().BeNull();
         }
     }
 }
