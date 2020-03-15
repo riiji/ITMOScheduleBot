@@ -33,7 +33,6 @@ namespace ItmoSchedule.BotFramework
 
         private void ApiProviderOnMessage(object sender, BotEventArgs e)
         {
-            TaskExecuteResult commandExecuteResult = new TaskExecuteResult(true);
             try
             {
                 CommandArgumentContainer commandWithArgs = Utilities.ParseCommand(e.Text, e.GroupId);
@@ -45,20 +44,20 @@ namespace ItmoSchedule.BotFramework
                 if (!commandTaskResult.IsSuccess)
                     return;
 
-                commandExecuteResult = _commandHandler.ExecuteCommand(commandWithArgs);
+                var commandExecuteResult = _commandHandler.ExecuteCommand(commandWithArgs);
 
                 if (!commandExecuteResult.IsSuccess)
                     Logger.Warning(commandExecuteResult.ExecuteMessage);
+
+                var writeMessageResult =
+                    _messageWriter.WriteMessage(new SenderData(e.GroupId), commandExecuteResult.ExecuteMessage);
+                Logger.Info(writeMessageResult.ExecuteMessage);
             }
             catch (Exception error)
             {
                 Logger.Error(error.Message);
             }
-
-            var writeMessageResult = _messageWriter.WriteMessage(new SenderData(e.GroupId), commandExecuteResult.ExecuteMessage);
-
-            Logger.Info(writeMessageResult.ExecuteMessage);
-            if (writeMessageResult.GetException() != null)
+            finally
             {
                 _botProvider.Initialize();
             }
