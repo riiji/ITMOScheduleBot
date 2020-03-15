@@ -15,7 +15,7 @@ namespace ItmoSchedule.BotFramework.CommandControllers
 
         public TaskExecuteResult IsCommandCorrect(CommandArgumentContainer args)
         {
-            TaskExecuteResult<IBotCommand> commandTask = _commands.GetCommand(args.CommandName);
+            var commandTask = _commands.GetCommand(args.CommandName);
 
             if(!commandTask.IsSuccess)
                 return commandTask;

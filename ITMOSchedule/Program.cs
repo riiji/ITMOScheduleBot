@@ -2,13 +2,12 @@
 using ItmoSchedule.BotFramework;
 using ItmoSchedule.Tools.Loggers;
 using ItmoSchedule.VK;
-using ITMOSchedule.VK;
 
 namespace ItmoSchedule
 {
-    internal class Program
+    internal static class Program
     {
-        public async Task MainAsync()
+        private static async Task MainAsync()
         { 
             var apiProvider = new VkBotApiProvider(new VkSettings());
             var authTaskResult = apiProvider.Initialize();
@@ -19,6 +18,6 @@ namespace ItmoSchedule
             await Task.Delay(-1);
         }
 
-        private static void Main() => new Program().MainAsync().GetAwaiter().GetResult();
+        private static void Main() => MainAsync().GetAwaiter().GetResult();
     }
 }

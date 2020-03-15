@@ -42,7 +42,7 @@ namespace ItmoSchedule.Common
         }
 
         private Exception _exception;
-        public string ExecuteMessage { get; private set; } = string.Empty;
+        public string ExecuteMessage { get; } = string.Empty;
         public bool IsSuccess { get; }
     }
 }

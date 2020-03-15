@@ -11,7 +11,7 @@ using VkApi.Wrapper.LongPolling.Bot;
 using VkApi.Wrapper.Types.Groups;
 using VkApi.Wrapper.Types.Messages;
 
-namespace ITMOSchedule.VK
+namespace ItmoSchedule.VK
 {
     public class VkBotApiProvider : IBotApiProvider, IDisposable
     {
@@ -39,7 +39,7 @@ namespace ITMOSchedule.VK
 
         public TaskExecuteResult Initialize()
         {
-            AccessToken accessToken = AccessToken.FromString(_settings.Key);
+            var accessToken = AccessToken.FromString(_settings.Key);
             _vkApi = new Vkontakte(_settings.AppId, _settings.AppSecret) { AccessToken = accessToken };
             GroupsLongPollServer settings = _vkApi.Groups.GetLongPollServer(_settings.GroupId).Result;
 

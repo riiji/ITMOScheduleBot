@@ -18,7 +18,7 @@ namespace ItmoSchedule.VK
 
         public TaskExecuteResult WriteMessage(SenderData sender, string message)
         {
-            Task<int> sendMessageTask = _vkMessages.Send(
+            var sendMessageTask = _vkMessages.Send(
                 randomId: Utilities.GetRandom(),
                 peerId: sender.GroupId,
                 message: message);
