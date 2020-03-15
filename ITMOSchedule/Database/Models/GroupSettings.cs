@@ -11,7 +11,7 @@ namespace ItmoSchedule.Database.Models
         }
 
         [Key]
-        public string GroupId { get; set; }
-        public string GroupNumber { get; set; }
+        public string GroupId { get; }
+        public string GroupNumber { get; }
     }
 }

@@ -4,10 +4,10 @@ namespace ItmoSchedule.Database.Models
 {
     public class EventSettings
     {
-        public int Id { get; set; }
+        public int Id { get; }
 
-        public string UserId { get; set; }
+        public string UserId { get; }
 
-        public DateTime DateTime { get; set; }
+        public DateTime DateTime { get; }
     }
 }

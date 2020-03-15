@@ -13,11 +13,11 @@ namespace ItmoSchedule.BotFramework.CommandControllers
             Commands.TryAdd(command.CommandName, command);
         }
 
-        public TaskExecuteResult<IBotCommand> GetCommand(string commandName)
+        public Result<IBotCommand> GetCommand(string commandName)
         {
             return Commands.TryGetValue(commandName, out IBotCommand command)
-                ? new TaskExecuteResult<IBotCommand>(true, command)
-                : new TaskExecuteResult<IBotCommand>(false, $"command {commandName} not founded", null);
+                ? new Result<IBotCommand>(true, command)
+                : new Result<IBotCommand>(false, $"command {commandName} not founded", null);
         }
     }
 }

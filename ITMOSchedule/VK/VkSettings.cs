@@ -16,12 +16,12 @@ namespace ItmoSchedule.VK
             GroupId = Convert.ToInt32(settings.Find("VkGroupId").Value);
         }
 
-        public string Key { get; set; }
+        public string Key { get; }
 
-        public int AppId { get; set; }
+        public int AppId { get; }
 
-        public string AppSecret { get; set; }
+        public string AppSecret { get; }
 
-        public int GroupId { get; set; }
+        public int GroupId { get; }
     }
 }

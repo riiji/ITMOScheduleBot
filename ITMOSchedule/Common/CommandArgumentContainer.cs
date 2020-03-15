@@ -4,11 +4,11 @@ namespace ItmoSchedule.Common
 {
     public class CommandArgumentContainer
     {
-        public string CommandName { get; set; }
+        public string CommandName { get; }
 
-        public SenderData Sender { get; set; }
+        public SenderData Sender { get; }
 
-        public List<string> Arguments { get; set; }
+        public List<string> Arguments { get; }
 
         public CommandArgumentContainer(string commandName, SenderData sender, List<string> arguments)
         {
