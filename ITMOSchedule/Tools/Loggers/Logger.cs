@@ -12,7 +12,7 @@ namespace ItmoSchedule.Tools.Loggers
         }
 
         private static readonly ILogger Log;
-        private static readonly LogLevel LogLevel = LogLevel.Message;
+        private static readonly LogLevel LogLevel = LogLevel.Info;
 
         public static void Info(string message) => InternalWrite(message, LogLevel.Info);
         public static void Message(string message) => InternalWrite(message, LogLevel.Message);
