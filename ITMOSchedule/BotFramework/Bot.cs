@@ -11,12 +11,10 @@ namespace ItmoSchedule.BotFramework
     {
         private readonly CommandHandler _commandHandler;
         private readonly IBotApiProvider _botProvider;
-        private readonly IWriteMessage _messageWriter;
 
-        public Bot(IBotApiProvider botProvider, IWriteMessage messageWriter)
+        public Bot(IBotApiProvider botProvider)
         {
             _botProvider = botProvider;
-            _messageWriter = messageWriter;
 
             _commandHandler = new CommandHandler(new CommandsList());
 
@@ -50,7 +48,8 @@ namespace ItmoSchedule.BotFramework
                     Logger.Warning(commandExecuteResult.ExecuteMessage);
 
                 var writeMessageResult =
-                    _messageWriter.WriteMessage(new SenderData(e.GroupId), commandExecuteResult.ExecuteMessage);
+                    _botProvider.WriteMessage(new SenderData(e.GroupId), commandExecuteResult.ExecuteMessage);
+
                 Logger.Info(writeMessageResult.ExecuteMessage);
             }
             catch (Exception error)
@@ -59,7 +58,10 @@ namespace ItmoSchedule.BotFramework
             }
             finally
             {
-                _botProvider.Initialize();
+                var result = _botProvider.Initialize();
+                if(result.GetException()!=null)
+                    Logger.Error(result.GetException().Message);
+                Logger.Message(result.ExecuteMessage);
             }
         }
 

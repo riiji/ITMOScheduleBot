@@ -13,7 +13,7 @@ namespace ItmoSchedule.BotFramework.CommandControllers
             _commands = commands;
         }
 
-        public TaskExecuteResult IsCommandCorrect(CommandArgumentContainer args)
+        public Result IsCommandCorrect(CommandArgumentContainer args)
         {
             var commandTask = _commands.GetCommand(args.CommandName);
 
@@ -23,12 +23,12 @@ namespace ItmoSchedule.BotFramework.CommandControllers
             var command = commandTask.Value;
 
             if(command.CanExecute(args))
-                return new TaskExecuteResult(true, "ok");
+                return new Result(true, "ok");
 
             var loggerMessage = $"command {command.CommandName} not executable with args ";
             loggerMessage = args.Arguments.Aggregate(loggerMessage, (current, t) => current + (t + " "));
  
-            return new TaskExecuteResult(false, loggerMessage);
+            return new Result(false, loggerMessage);
         }
 
         public void RegisterCommand(IBotCommand command)
@@ -36,7 +36,7 @@ namespace ItmoSchedule.BotFramework.CommandControllers
             _commands.AddCommand(command);
         }
 
-        public TaskExecuteResult ExecuteCommand(CommandArgumentContainer args)
+        public Result ExecuteCommand(CommandArgumentContainer args)
         {
             Result<IBotCommand> commandTask = _commands.GetCommand(args.CommandName);
 

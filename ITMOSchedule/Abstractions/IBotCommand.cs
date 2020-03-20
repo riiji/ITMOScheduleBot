@@ -12,6 +12,6 @@ namespace ItmoSchedule.Abstractions
 
         bool CanExecute(CommandArgumentContainer args);
 
-        TaskExecuteResult Execute(CommandArgumentContainer args);
+        Result Execute(CommandArgumentContainer args);
     }
 }

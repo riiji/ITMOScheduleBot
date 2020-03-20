@@ -36,12 +36,32 @@ namespace ItmoSchedule.VK
             _client.OnMessageNew -= Client_OnMessageNew;
             _vkApi?.Dispose();
         }
+        public Result WriteMessage(SenderData sender, string message)
+        {
+            var sendMessageTask = _vkApi.Messages.Send(
+                randomId: Utilities.GetRandom(),
+                peerId: sender.GroupId,
+                message: message);
 
-        public TaskExecuteResult Initialize()
+            sendMessageTask.WaitSafe();
+
+            if (sendMessageTask.IsFaulted)
+                return new Result(false, "Vk write message failed").WithException(sendMessageTask.Exception);
+            return new Result(true, "vk write message ok");
+        }
+
+        public Result Initialize()
         {
             var accessToken = AccessToken.FromString(_settings.Key);
             _vkApi = new Vkontakte(_settings.AppId, _settings.AppSecret) { AccessToken = accessToken };
-            GroupsLongPollServer settings = _vkApi.Groups.GetLongPollServer(_settings.GroupId).Result;
+            var getSettingsTask = _vkApi.Groups.GetLongPollServer(_settings.GroupId);
+
+            getSettingsTask.WaitSafe();
+
+            if (getSettingsTask.IsFaulted)
+                return new Result(false, "Get long poll server failed").WithException(getSettingsTask.Exception);
+
+            var settings = getSettingsTask.Result;
 
             var clientTask = _vkApi.StartBotLongPollClient
             (
@@ -54,21 +74,14 @@ namespace ItmoSchedule.VK
 
             if (clientTask.IsFaulted)
             {
-                Logger.Error($"Failed to process Auth, handle exception:{clientTask.Exception.Message}");
-
-                return new TaskExecuteResult(false, "Auth is failed").WithException(clientTask.Exception);
+                return new Result(false, "Auth is failed").WithException(clientTask.Exception);
             }
 
             _client = clientTask.Result;
 
             _client.OnMessageNew += Client_OnMessageNew;
 
-            return new TaskExecuteResult(true, "Auth successfully");
-        }
-
-        public Vkontakte GetApi()
-        {
-            return _vkApi;
+            return new Result(true, "Auth successfully");
         }
     }
 }

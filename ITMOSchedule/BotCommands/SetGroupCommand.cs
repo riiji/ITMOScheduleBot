@@ -16,7 +16,7 @@ namespace ItmoSchedule.BotCommands
             return true;
         }
 
-        public TaskExecuteResult Execute(CommandArgumentContainer args)
+        public Result Execute(CommandArgumentContainer args)
         {
             using var dbContext = new DatabaseContext();
 
@@ -28,7 +28,7 @@ namespace ItmoSchedule.BotCommands
             dbContext.GroupSettings.Add(new GroupSettings(args.Sender.GroupId.ToString(), args.Arguments.FirstOrDefault()));
             dbContext.SaveChanges();
 
-            return new TaskExecuteResult(true, "ok");
+            return new Result(true, "ok");
         }
     }
 }

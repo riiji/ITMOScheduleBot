@@ -2,7 +2,7 @@
 
 namespace ItmoSchedule.Common
 {
-    public class Result<T> : TaskExecuteResult
+    public class Result<T> : Result
     {
         public Result(bool isSuccess, T result) : base(isSuccess)
         {
@@ -17,20 +17,20 @@ namespace ItmoSchedule.Common
         public readonly T Value;
     }
 
-    public class TaskExecuteResult
+    public class Result
     {
-        public TaskExecuteResult(bool isSuccess)
+        public Result(bool isSuccess)
         {
             IsSuccess = isSuccess;
         }
 
-        public TaskExecuteResult(bool isSuccess, string executeMessage)
+        public Result(bool isSuccess, string executeMessage)
         {
             IsSuccess = isSuccess;
             ExecuteMessage = executeMessage;
         }
 
-        public TaskExecuteResult WithException<T>(T exception) where T : Exception
+        public Result WithException<T>(T exception) where T : Exception
         {
             _exception = exception;
             return this;

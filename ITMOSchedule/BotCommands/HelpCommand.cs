@@ -24,7 +24,7 @@ namespace ItmoSchedule.BotCommands
             return true;
         }
 
-        public TaskExecuteResult Execute(CommandArgumentContainer args)
+        public Result Execute(CommandArgumentContainer args)
         {
             var result = string.Join(Environment.NewLine+Environment.NewLine,
                 _commandList.Commands.ToList()
@@ -32,7 +32,7 @@ namespace ItmoSchedule.BotCommands
                         $"{commands.Value.CommandName} : {commands.Value.Description}, {Environment.NewLine}args: " +
                         $"{string.Join(", ", commands.Value.Args.Select(s=>s))}"));
 
-            return new TaskExecuteResult(true, result);
+            return new Result(true, result);
         }
     }
 }

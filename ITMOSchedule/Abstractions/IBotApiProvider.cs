@@ -4,10 +4,10 @@ using ItmoSchedule.Common;
 
 namespace ItmoSchedule.Abstractions
 {
-    public interface IBotApiProvider
+    public interface IBotApiProvider : IWriteMessage
     {
         public event EventHandler<BotEventArgs> OnMessage;
 
-        public TaskExecuteResult Initialize();
+        public Result Initialize();
     }
 }

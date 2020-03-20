@@ -31,7 +31,7 @@ namespace ItmoSchedule.BotCommands
             return true;
         }
 
-        public TaskExecuteResult Execute(CommandArgumentContainer args)
+        public Result Execute(CommandArgumentContainer args)
         {
             var parseResult = ParseArguments(args, out string groupName, out DateTime dateTime);
 
@@ -42,13 +42,13 @@ namespace ItmoSchedule.BotCommands
             scheduleTask.WaitSafe();
 
             if (scheduleTask.IsFaulted)
-                return new TaskExecuteResult(false, "invalid group number");
+                return new Result(false, "invalid group number");
 
             string result = FormatResult(scheduleTask.Result, dateTime);
-            return new TaskExecuteResult(true, result);
+            return new Result(true, result);
         }
 
-        private TaskExecuteResult ParseArguments(CommandArgumentContainer args, out string groupName, out DateTime date)
+        private Result ParseArguments(CommandArgumentContainer args, out string groupName, out DateTime date)
         {
             using var dbContext = new DatabaseContext();
 
@@ -56,7 +56,7 @@ namespace ItmoSchedule.BotCommands
             {
                 groupName = dbContext.GroupSettings.Find(args.Sender.GroupId.ToString()).GroupNumber;
                 date = DateTime.Today;
-                return new TaskExecuteResult(true);
+                return new Result(true);
             }
 
             if (args.Arguments.Count == 1)
@@ -66,12 +66,12 @@ namespace ItmoSchedule.BotCommands
                 if (result)
                 {
                     groupName = dbContext.GroupSettings.Find(args.Sender.GroupId.ToString()).GroupNumber;
-                    return new TaskExecuteResult(true);
+                    return new Result(true);
                 }
                 else
                 {
                     groupName = null;
-                    return new TaskExecuteResult(false, $"Can't parse to DateTime: {dateAsString}");
+                    return new Result(false, $"Can't parse to DateTime: {dateAsString}");
                 }
             }
 
@@ -80,15 +80,15 @@ namespace ItmoSchedule.BotCommands
                 groupName = args.Arguments.FirstOrDefault();
                 bool dateTimeResult = DateTime.TryParse(args.Arguments.Last(), out date);
                 if (dateTimeResult == false)
-                    return new TaskExecuteResult(false, $"Can't parse to DateTime: {args.Arguments.Last()}");
+                    return new Result(false, $"Can't parse to DateTime: {args.Arguments.Last()}");
 
                 Logger.Message(date.ToShortDateString());
-                return new TaskExecuteResult(true);
+                return new Result(true);
             }
 
             groupName = null;
             date = DateTime.MinValue;
-            return new TaskExecuteResult(false, "invalid arguments");
+            return new Result(false, "invalid arguments");
         }
 
         private static string FormatResult(GroupScheduleModel groupSchedule, DateTime scheduleDateTime)

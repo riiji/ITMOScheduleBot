@@ -14,9 +14,9 @@ namespace ItmoSchedule.BotCommands
             return true;
         }
 
-        public TaskExecuteResult Execute(CommandArgumentContainer args)
+        public Result Execute(CommandArgumentContainer args)
         {
-            return new TaskExecuteResult(true, "Pong");
+            return new Result(true, "Pong");
         }
     }
 }

@@ -12,8 +12,7 @@ namespace ItmoSchedule
             var apiProvider = new VkBotApiProvider(new VkSettings());
             var authTaskResult = apiProvider.Initialize();
             Logger.Info(authTaskResult.ExecuteMessage);
-            var api = apiProvider.GetApi();
-            var bot = new Bot(apiProvider, new VkWriteMessage(api.Messages));
+            var bot = new Bot(apiProvider);
             bot.Process();
             await Task.Delay(-1);
         }
