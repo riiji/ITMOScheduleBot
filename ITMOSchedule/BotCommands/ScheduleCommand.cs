@@ -95,7 +95,7 @@ namespace ItmoSchedule.BotCommands
         {
             List<ScheduleItemModel> schedule = groupSchedule.Schedule.GetDaySchedule(scheduleDateTime, DateConvertorService.FirstWeekEven);
 
-            string result = "🔑Schedule on " +
+            string result = $"🔑Schedule [{groupSchedule.Label}]on " +
                             scheduleDateTime.ToShortDateString() +
                             Environment.NewLine +
                             Environment.NewLine;
