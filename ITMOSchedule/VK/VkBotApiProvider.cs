@@ -34,7 +34,6 @@ namespace ItmoSchedule.VK
         public void Dispose()
         {
             _client.OnMessageNew -= Client_OnMessageNew;
-            _vkApi?.Dispose();
         }
         public Result WriteMessage(SenderData sender, string message)
         {
