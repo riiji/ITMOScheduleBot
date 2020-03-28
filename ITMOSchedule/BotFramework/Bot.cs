@@ -55,12 +55,9 @@ namespace ItmoSchedule.BotFramework
             catch (Exception error)
             {
                 Logger.Error(error.Message);
-            }
-            finally
-            {
                 _botProvider.Dispose();
                 var result = _botProvider.Initialize();
-                if(result.GetException()!=null)
+                if (result.GetException() != null)
                     Logger.Error(result.GetException().Message);
                 Logger.Message(result.ExecuteMessage);
             }

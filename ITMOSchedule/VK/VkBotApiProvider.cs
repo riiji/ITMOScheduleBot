@@ -34,6 +34,7 @@ namespace ItmoSchedule.VK
         public void Dispose()
         {
             _client.OnMessageNew -= Client_OnMessageNew;
+            _client.LongPollFailureReceived -= Client_OnFail;
         }
         public Result WriteMessage(SenderData sender, string message)
         {
@@ -80,7 +81,21 @@ namespace ItmoSchedule.VK
 
             _client.OnMessageNew += Client_OnMessageNew;
 
+            _client.LongPollFailureReceived += Client_OnFail; 
+
             return new Result(true, "Auth successfully");
+        }
+
+        private void Client_OnFail(object? sender, int e)
+        {
+            var settings = _vkApi.Groups.GetLongPollServer(_settings.GroupId).Result;
+            var client = _vkApi.StartBotLongPollClient
+            (
+                settings.Server,
+                settings.Key,
+                Convert.ToInt32(settings.Ts)
+            ).Result;
+            _client = client;
         }
     }
 }
