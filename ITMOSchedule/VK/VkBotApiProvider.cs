@@ -96,6 +96,7 @@ namespace ItmoSchedule.VK
                 Convert.ToInt32(settings.Ts)
             ).Result;
             _client = client;
+            _client.OnMessageNew += Client_OnMessageNew;
         }
     }
 }
