@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using ItmoSchedule.Abstractions;
 using ItmoSchedule.Common;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace ItmoSchedule.BotFramework.CommandControllers
 {
@@ -17,17 +18,17 @@ namespace ItmoSchedule.BotFramework.CommandControllers
         {
             var commandTask = _commands.GetCommand(args.CommandName);
 
-            if(!commandTask.IsSuccess)
+            if (!commandTask.IsSuccess)
                 return commandTask;
 
             var command = commandTask.Value;
 
-            if(command.CanExecute(args))
-                return new Result(true, "ok");
+            if (command.CanExecute(args))
+                return new Result(true, $"command {args.CommandName} can be executable with args {string.Join(' ', args.Arguments.Select(x => x))}");
 
-            var loggerMessage = $"command {command.CommandName} not executable with args ";
-            loggerMessage = args.Arguments.Aggregate(loggerMessage, (current, t) => current + (t + " "));
- 
+            var loggerMessage = $"command {command.CommandName} not executable with args {string.Join(' ', args.Arguments.Select(x=>x))}";
+            //loggerMessage = args.Arguments.Aggregate(loggerMessage, (current, t) => current + (t + " "));
+
             return new Result(false, loggerMessage);
         }
 
@@ -45,7 +46,7 @@ namespace ItmoSchedule.BotFramework.CommandControllers
 
             var command = commandTask.Value;
             var commandExecuteResult = command.Execute(args);
-            
+
             return commandExecuteResult;
         }
 

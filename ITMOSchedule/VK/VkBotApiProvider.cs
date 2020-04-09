@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using ItmoSchedule.Abstractions;
 using ItmoSchedule.BotFramework;
 using ItmoSchedule.Common;
@@ -46,15 +47,15 @@ namespace ItmoSchedule.VK
             sendMessageTask.WaitSafe();
 
             if (sendMessageTask.IsFaulted)
-                return new Result(false, "Vk write message failed").WithException(sendMessageTask.Exception);
-            return new Result(true, "vk write message ok");
+                return new Result(false, $"Vk write message failed from {sender.GroupId} with message {message}").WithException(sendMessageTask.Exception);
+            return new Result(true, $"Vk write {message} to {sender.GroupId} ok");
         }
 
         public Result Initialize()
         {
             var accessToken = AccessToken.FromString(_settings.Key);
             _vkApi = new Vkontakte(_settings.AppId, _settings.AppSecret) { AccessToken = accessToken };
-            var getSettingsTask = _vkApi.Groups.GetLongPollServer(_settings.GroupId);
+            Task<GroupsLongPollServer> getSettingsTask = _vkApi.Groups.GetLongPollServer(_settings.GroupId);
 
             getSettingsTask.WaitSafe();
 
@@ -63,7 +64,7 @@ namespace ItmoSchedule.VK
 
             var settings = getSettingsTask.Result;
 
-            var clientTask = _vkApi.StartBotLongPollClient
+            Task<BotLongPollClient> clientTask = _vkApi.StartBotLongPollClient
             (
                 settings.Server,
                 settings.Key,
@@ -81,13 +82,15 @@ namespace ItmoSchedule.VK
 
             _client.OnMessageNew += Client_OnMessageNew;
 
-            _client.LongPollFailureReceived += Client_OnFail; 
+            _client.LongPollFailureReceived += Client_OnFail;
 
             return new Result(true, "Auth successfully");
         }
 
         private void Client_OnFail(object? sender, int e)
         {
+            Logger.Error($"VkBotApiProvider_Client_OnFail with {e}");
+
             var settings = _vkApi.Groups.GetLongPollServer(_settings.GroupId).Result;
             var client = _vkApi.StartBotLongPollClient
             (

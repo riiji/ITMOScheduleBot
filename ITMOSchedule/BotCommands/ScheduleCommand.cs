@@ -33,66 +33,85 @@ namespace ItmoSchedule.BotCommands
 
         public Result Execute(CommandArgumentContainer args)
         {
-            var parseResult = ParseArguments(args, out string groupName, out DateTime dateTime);
+            try
+            {
+                var parseResult = ParseArguments(args, out string groupName, out DateTime dateTime);
 
-            if (!parseResult.IsSuccess)
-                return parseResult;
+                if (!parseResult.IsSuccess)
+                    return parseResult;
 
-            Task<GroupScheduleModel> scheduleTask = _itmoProvider.ScheduleApi.GetGroupSchedule(groupName);
-            scheduleTask.WaitSafe();
+                Task<GroupScheduleModel> scheduleTask = _itmoProvider.ScheduleApi.GetGroupSchedule(groupName);
+                scheduleTask.WaitSafe();
 
-            if (scheduleTask.IsFaulted)
-                return new Result(false, "invalid group number");
+                if (scheduleTask.IsFaulted)
+                    return new Result(false, $"{groupName} from {args.Sender.GroupId} is invalid");
 
-            string result = FormatResult(scheduleTask.Result, dateTime);
-            return new Result(true, result);
+                string result = FormatResult(scheduleTask.Result, dateTime);
+                return new Result(true, result);
+            }
+            catch (Exception e)
+            {
+                return new Result(false, $"ScheduleCommand from {args.Sender.GroupId} was failed with exception {e.Message}").WithException(e);
+            }
         }
 
         private Result ParseArguments(CommandArgumentContainer args, out string groupName, out DateTime date)
         {
-            using var dbContext = new DatabaseContext();
-
-            if (args.Arguments.Count == 0)
+            try
             {
-                groupName = dbContext.GroupSettings.Find(args.Sender.GroupId.ToString()).GroupNumber;
-                date = DateTime.Today;
-                return new Result(true);
-            }
+                using var dbContext = new DatabaseContext();
 
-            if (args.Arguments.Count == 1)
-            {
-                string dateAsString = args.Arguments.FirstOrDefault();
-                bool result = DateTime.TryParse(dateAsString, out date);
-                if (result)
+                if (args.Arguments.Count == 0)
                 {
                     groupName = dbContext.GroupSettings.Find(args.Sender.GroupId.ToString()).GroupNumber;
+                    date = DateTime.Today;
                     return new Result(true);
                 }
-                else
+
+                if (args.Arguments.Count == 1)
                 {
-                    groupName = null;
-                    return new Result(false, $"Can't parse to DateTime: {dateAsString}");
+                    string dateAsString = args.Arguments.FirstOrDefault();
+                    bool result = DateTime.TryParse(dateAsString, out date);
+                    if (result)
+                    {
+                        groupName = dbContext.GroupSettings.Find(args.Sender.GroupId.ToString()).GroupNumber;
+                        return new Result(true);
+                    }
+                    else
+                    {
+                        groupName = null;
+                        return new Result(false, $"dateTime {dateAsString} from {args.Sender.GroupId} is invalid");
+                    }
                 }
-            }
 
-            if (args.Arguments.Count == 2)
+                if (args.Arguments.Count == 2)
+                {
+                    groupName = args.Arguments.FirstOrDefault();
+                    bool dateTimeResult = DateTime.TryParse(args.Arguments.Last(), out date);
+                    if (dateTimeResult == false)
+                        return new Result(false,
+                            $"dateTime {args.Arguments.Last()} from {args.Sender.GroupId} is invalid");
+
+                    Logger.Message(date.ToShortDateString());
+                    return new Result(true);
+                }
+
+                groupName = null;
+                date = DateTime.MinValue;
+                return new Result(false, $"{args.Sender.GroupId}, invalid arguments");
+            }
+            catch (Exception e)
             {
-                groupName = args.Arguments.FirstOrDefault();
-                bool dateTimeResult = DateTime.TryParse(args.Arguments.Last(), out date);
-                if (dateTimeResult == false)
-                    return new Result(false, $"Can't parse to DateTime: {args.Arguments.Last()}");
+                groupName = string.Empty;
+                date = DateTime.MinValue;
 
-                Logger.Message(date.ToShortDateString());
-                return new Result(true);
+                return new Result(false, $"Parse argument from {args.Sender.GroupId} was failed with exception {e.Message}").WithException(e);
             }
-
-            groupName = null;
-            date = DateTime.MinValue;
-            return new Result(false, "invalid arguments");
         }
 
         private static string FormatResult(GroupScheduleModel groupSchedule, DateTime scheduleDateTime)
         {
+
             List<ScheduleItemModel> schedule = groupSchedule.Schedule.GetDaySchedule(scheduleDateTime, DateConvertorService.FirstWeekEven);
 
             string result = $"🔑Schedule [{groupSchedule.Label}]on " +

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using ItmoSchedule.Abstractions;
 using ItmoSchedule.Common;
 using ItmoSchedule.Database;
@@ -18,17 +19,24 @@ namespace ItmoSchedule.BotCommands
 
         public Result Execute(CommandArgumentContainer args)
         {
-            using var dbContext = new DatabaseContext();
+            try
+            {
+                using var dbContext = new DatabaseContext();
 
-            var oldSetting = dbContext.GroupSettings.Find(args.Sender.GroupId.ToString());
+                var oldSetting = dbContext.GroupSettings.Find(args.Sender.GroupId.ToString());
 
-            if (oldSetting != null)
-                dbContext.GroupSettings.Remove(oldSetting);
-             
-            dbContext.GroupSettings.Add(new GroupSettings(args.Sender.GroupId.ToString(), args.Arguments.FirstOrDefault()));
-            dbContext.SaveChanges();
+                if (oldSetting != null)
+                    dbContext.GroupSettings.Remove(oldSetting);
 
-            return new Result(true, "ok");
+                dbContext.GroupSettings.Add(new GroupSettings(args.Sender.GroupId.ToString(), args.Arguments.FirstOrDefault()));
+                dbContext.SaveChanges();
+
+                return new Result(true, $"SetGroup from {args.Sender.GroupId} with {args.Arguments.FirstOrDefault()} was successfully");
+            }
+            catch (Exception e)
+            {
+                return new Result(false, $"SetGroup from {args.Sender.GroupId} was with exception {e.Message}").WithException(e);
+            }
         }
     }
 }

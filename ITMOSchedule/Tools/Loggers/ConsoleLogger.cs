@@ -6,7 +6,7 @@ namespace ItmoSchedule.Tools.Loggers
     {
         public void Write(string message)
         {
-            Console.WriteLine(message);
+            Console.WriteLine(DateTime.Now+" | "+message);
         }
     }
 }

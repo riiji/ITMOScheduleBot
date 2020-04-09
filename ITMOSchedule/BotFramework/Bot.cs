@@ -3,6 +3,7 @@ using ItmoSchedule.Abstractions;
 using ItmoSchedule.BotCommands;
 using ItmoSchedule.BotFramework.CommandControllers;
 using ItmoSchedule.Common;
+using ItmoSchedule.Database.Models;
 using ItmoSchedule.Tools.Loggers;
 
 namespace ItmoSchedule.BotFramework
@@ -11,6 +12,7 @@ namespace ItmoSchedule.BotFramework
     {
         private readonly CommandHandler _commandHandler;
         private readonly IBotApiProvider _botProvider;
+        private readonly char _prefix = '!';
 
         public Bot(IBotApiProvider botProvider)
         {
@@ -33,7 +35,7 @@ namespace ItmoSchedule.BotFramework
         {
             try
             {
-                CommandArgumentContainer commandWithArgs = Utilities.ParseCommand(e.Text, e.GroupId);
+                CommandArgumentContainer commandWithArgs = Utilities.ParseCommand(e.Text, e.GroupId, _prefix);
 
                 var commandTaskResult = _commandHandler.IsCommandCorrect(commandWithArgs);
 

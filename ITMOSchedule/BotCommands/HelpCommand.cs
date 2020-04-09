@@ -3,6 +3,7 @@ using System.Linq;
 using ItmoSchedule.Abstractions;
 using ItmoSchedule.BotFramework.CommandControllers;
 using ItmoSchedule.Common;
+using NLog.LayoutRenderers.Wrappers;
 
 namespace ItmoSchedule.BotCommands
 {
@@ -26,13 +27,20 @@ namespace ItmoSchedule.BotCommands
 
         public Result Execute(CommandArgumentContainer args)
         {
-            var result = string.Join(Environment.NewLine+Environment.NewLine,
-                _commandList.Commands.ToList()
-                    .Select(commands =>
-                        $"{commands.Value.CommandName} : {commands.Value.Description}, {Environment.NewLine}args: " +
-                        $"{string.Join(", ", commands.Value.Args.Select(s=>s))}"));
+            try
+            {
+                var result = string.Join(Environment.NewLine + Environment.NewLine,
+                    _commandList.Commands.ToList()
+                        .Select(commands =>
+                            $"{commands.Value.CommandName} : {commands.Value.Description}, {Environment.NewLine}args: " +
+                            $"{string.Join(", ", commands.Value.Args.Select(s => s))}"));
 
-            return new Result(true, result);
+                return new Result(true, result);
+            }
+            catch (Exception e)
+            {
+                return new Result(false, $"HelpCommand from {args.Sender.GroupId} was failed with exception {e.Message}").WithException(e);
+            }
         }
     }
 }
