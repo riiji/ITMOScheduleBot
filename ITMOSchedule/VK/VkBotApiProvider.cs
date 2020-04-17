@@ -98,8 +98,10 @@ namespace ItmoSchedule.VK
                 settings.Key,
                 Convert.ToInt32(settings.Ts)
             ).Result;
+
             _client = client;
             _client.OnMessageNew += Client_OnMessageNew;
+            _client.LongPollFailureReceived += Client_OnFail;
         }
     }
 }
