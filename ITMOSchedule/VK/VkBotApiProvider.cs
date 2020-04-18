@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ItmoSchedule.Abstractions;
 using ItmoSchedule.BotFramework;
@@ -6,6 +7,7 @@ using ItmoSchedule.Common;
 using ItmoSchedule.Tools.Extensions;
 using ItmoSchedule.Tools.Loggers;
 using ItmoSchedule.VK;
+using Newtonsoft.Json.Linq;
 using VkApi.Wrapper;
 using VkApi.Wrapper.Auth;
 using VkApi.Wrapper.LongPolling.Bot;
@@ -79,12 +81,16 @@ namespace ItmoSchedule.VK
             }
 
             _client = clientTask.Result;
-
             _client.OnMessageNew += Client_OnMessageNew;
-
             _client.LongPollFailureReceived += Client_OnFail;
+            _client.ResponseReceived += Client_OnResponse;
 
             return new Result(true, "Auth successfully");
+        }
+
+        private void Client_OnResponse(object? sender, JArray e)
+        {
+            Logger.Info($"Response: {string.Join(' ',e.ToArray().Select(x=>x.ToString()))}");
         }
 
         private void Client_OnFail(object? sender, int e)
@@ -102,6 +108,9 @@ namespace ItmoSchedule.VK
             _client = client;
             _client.OnMessageNew += Client_OnMessageNew;
             _client.LongPollFailureReceived += Client_OnFail;
+            _client.ResponseReceived += Client_OnResponse;
         }
+
+
     }
 }
