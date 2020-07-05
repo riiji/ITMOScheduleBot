@@ -15,21 +15,18 @@ namespace ItmoSchedule.BotFramework
             return Random.Next();
         }
 
-        public static CommandArgumentContainer ParseCommand(string commandsWithArgs, int groupId, char prefixCommand)
+        public static CommandArgumentContainer ParseCommand(BotEventArgs botArgs)
         {
-            string[] commands = commandsWithArgs.Split();
+            string[] commands = botArgs.Text.Split();
 
-            var commandName = commands.FirstOrDefault();
-
-            if (commandName == null)
-                throw new BotValidException("ParseCommand: commandName was null");
+            var commandName = commands.FirstOrDefault() ?? throw new BotValidException("ParseCommand: commandName was null");
 
             //commandName = prefixCommand + commandName.ToLower();
 
             //skip command name
             IEnumerable<string> args = commands.Skip(1);
 
-            return new CommandArgumentContainer(commandName, new SenderData(groupId), args.ToList());
+            return new CommandArgumentContainer(commandName, new SenderData(botArgs.GroupId), args.ToList());
         }
     }
 

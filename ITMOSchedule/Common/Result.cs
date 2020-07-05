@@ -19,7 +19,7 @@ namespace ItmoSchedule.Common
 
     public class Result
     {
-        public Result(bool isSuccess)
+        public Result(bool isSuccess) : this(isSuccess, null)
         {
             IsSuccess = isSuccess;
         }
@@ -27,22 +27,27 @@ namespace ItmoSchedule.Common
         public Result(bool isSuccess, string executeMessage)
         {
             IsSuccess = isSuccess;
-            ExecuteMessage = executeMessage;
+            _executeMessage = executeMessage;
         }
 
         public Result WithException<T>(T exception) where T : Exception
         {
-            _exception = exception;
+            Exception = exception;
             return this;
         }
 
-        public Exception GetException()
-        {
-            return _exception;
-        }
+        private readonly string _executeMessage;
 
-        private Exception _exception;
-        public string ExecuteMessage { get; } = string.Empty;
+        public Exception Exception { get; set; }
         public bool IsSuccess { get; }
+
+        public string ExecuteMessage
+        {
+            get
+            {
+                if (Exception != null) return $"{_executeMessage}" + Environment.NewLine + Exception.Message;
+                return _executeMessage;
+            }
+        }
     }
 }
