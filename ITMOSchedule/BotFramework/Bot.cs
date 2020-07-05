@@ -38,7 +38,7 @@ namespace ItmoSchedule.BotFramework
 
                 var commandTaskResult = _commandHandler.IsCommandCorrect(commandWithArgs);
 
-                Logger.Info(commandTaskResult.ExecuteMessage);
+                LoggerHolder.Log.Verbose(commandTaskResult.ExecuteMessage);
 
                 if (!commandTaskResult.IsSuccess)
                     return;
@@ -46,22 +46,22 @@ namespace ItmoSchedule.BotFramework
                 var commandExecuteResult = _commandHandler.ExecuteCommand(commandWithArgs);
 
                 if (!commandExecuteResult.IsSuccess)
-                    Logger.Warning(commandExecuteResult.ExecuteMessage);
+                    LoggerHolder.Log.Warning(commandExecuteResult.ExecuteMessage);
 
                 var writeMessageResult =
                     _botProvider.WriteMessage(new SenderData(e.GroupId), commandExecuteResult.ExecuteMessage);
 
-                Logger.Info(writeMessageResult.ExecuteMessage);
+                LoggerHolder.Log.Verbose(writeMessageResult.ExecuteMessage);
             }
             catch (Exception error)
             {
-                Logger.Error(error.Message);
+                LoggerHolder.Log.Error(error.Message);
                 _botProvider.Dispose();
                 var result = _botProvider.Initialize();
                 if (result.Exception != null)
-                    Logger.Message(result.ExecuteMessage);
+                    LoggerHolder.Log.Verbose(result.ExecuteMessage);
 
-                Logger.Message(result.ExecuteMessage);
+                LoggerHolder.Log.Verbose(result.ExecuteMessage);
             }
         }
 
