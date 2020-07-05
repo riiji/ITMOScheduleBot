@@ -6,13 +6,11 @@ using ItmoSchedule.BotFramework;
 using ItmoSchedule.Common;
 using ItmoSchedule.Tools.Extensions;
 using ItmoSchedule.Tools.Loggers;
-using ItmoSchedule.VK;
 using Newtonsoft.Json.Linq;
 using VkApi.Wrapper;
 using VkApi.Wrapper.Auth;
 using VkApi.Wrapper.LongPolling.Bot;
-using VkApi.Wrapper.Types.Groups;
-using VkApi.Wrapper.Types.Messages;
+using VkApi.Wrapper.Objects;
 
 namespace ItmoSchedule.VK
 {
