@@ -4,7 +4,8 @@ using ItmoSchedule.BotCommands;
 using ItmoSchedule.Database;
 using MessengerBotFramework.BotFramework;
 using MessengerBotFramework.BotFramework.CommandControllers;
-using MessengerBotFramework.MessangerApiProviders.VK;
+using MessengerBotFramework.Common;
+using MessengerBotFramework.MessengerApiProviders.VK;
 using MessengerBotFramework.Tools;
 
 namespace ItmoSchedule

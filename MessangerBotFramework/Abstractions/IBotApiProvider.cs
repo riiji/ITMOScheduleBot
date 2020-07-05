@@ -4,10 +4,9 @@ using MessengerBotFramework.Common;
 
 namespace MessengerBotFramework.Abstractions
 {
-    public interface IBotApiProvider : IWriteMessage
+    public interface IBotApiProvider : IWriteMessage, IDisposable
     {
         event EventHandler<BotEventArgs> OnMessage;
-        void Dispose();
         Result Initialize();
     }
 }

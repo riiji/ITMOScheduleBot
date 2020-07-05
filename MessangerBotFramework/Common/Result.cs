@@ -15,6 +15,13 @@ namespace MessengerBotFramework.Common
         }
 
         public readonly T Value;
+
+        public Result ContinueOnSuccess(Func<T, Result> action)
+        {
+            return IsSuccess
+                ? action.Invoke(Value)
+                : this;
+        }
     }
 
     public class Result
@@ -30,12 +37,6 @@ namespace MessengerBotFramework.Common
             _executeMessage = executeMessage;
         }
 
-        public Result WithException<T>(T exception) where T : Exception
-        {
-            Exception = exception;
-            return this;
-        }
-
         private readonly string _executeMessage;
 
         public Exception Exception { get; set; }
@@ -48,6 +49,12 @@ namespace MessengerBotFramework.Common
                 if (Exception != null) return $"{_executeMessage}" + Environment.NewLine + Exception.Message;
                 return _executeMessage;
             }
+        }
+
+        public Result WithException<T>(T exception) where T : Exception
+        {
+            Exception = exception;
+            return this;
         }
     }
 }

@@ -13,7 +13,7 @@ using VkApi.Wrapper.Auth;
 using VkApi.Wrapper.LongPolling.Bot;
 using VkApi.Wrapper.Objects;
 
-namespace MessengerBotFramework.MessangerApiProviders.VK
+namespace MessengerBotFramework.MessengerApiProviders.VK
 {
     public class VkBotApiProvider : IBotApiProvider, IDisposable
     {

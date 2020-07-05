@@ -1,11 +1,11 @@
 ﻿using Serilog;
 using Serilog.Core;
 
-namespace MessengerBotFramework.Tools
+namespace MessengerBotFramework.Common
 {
     public static class LoggerHolder
     {
-        public static Logger Log;
+        public static readonly Logger Log;
 
         static LoggerHolder()
         {

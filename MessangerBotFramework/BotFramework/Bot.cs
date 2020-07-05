@@ -2,7 +2,6 @@
 using MessengerBotFramework.Abstractions;
 using MessengerBotFramework.BotFramework.CommandControllers;
 using MessengerBotFramework.Common;
-using MessengerBotFramework.Tools;
 
 namespace MessengerBotFramework.BotFramework
 {
@@ -28,7 +27,7 @@ namespace MessengerBotFramework.BotFramework
         {
             try
             {
-                CommandArgumentContainer commandWithArgs = Utilities.ParseCommand(e);
+                CommandArgumentContainer commandWithArgs = CommandArgumentContainer.Parse(e);
 
                 var commandTaskResult = _commandHandler.IsCommandCorrect(commandWithArgs);
 
@@ -50,11 +49,11 @@ namespace MessengerBotFramework.BotFramework
             catch (Exception error)
             {
                 LoggerHolder.Log.Error(error.Message);
-                _botProvider.Dispose();
-                var result = _botProvider.Initialize();
-                if (result.Exception != null)
-                    LoggerHolder.Log.Information(result.ExecuteMessage);
 
+                LoggerHolder.Log.Information("Message handling failed, try restart bot provider");
+                _botProvider.Dispose();
+                Result result = _botProvider.Initialize();
+                
                 LoggerHolder.Log.Information(result.ExecuteMessage);
             }
         }

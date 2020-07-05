@@ -1,4 +1,4 @@
-﻿namespace MessengerBotFramework.MessangerApiProviders.VK
+﻿namespace MessengerBotFramework.MessengerApiProviders.VK
 {
     public class VkSettings
     {
