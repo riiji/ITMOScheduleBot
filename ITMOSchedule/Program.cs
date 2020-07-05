@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using ItmoSchedule.BotCommands;
 using ItmoSchedule.Database;
 using MessengerBotFramework.BotFramework;
+using MessengerBotFramework.BotFramework.CommandControllers;
 using MessengerBotFramework.MessangerApiProviders.VK;
 using MessengerBotFramework.Tools;
 
@@ -16,12 +17,14 @@ namespace ItmoSchedule
             var authTaskResult = apiProvider.Initialize();
             LoggerHolder.Log.Verbose(authTaskResult.ExecuteMessage);
 
-            //TODO: fix help command
-            var bot = new Bot(apiProvider,
+            var commandList = new CommandsList
+            {
                 new PingCommand(),
-                new HelpCommand(null),
                 new ScheduleCommand(),
-                new SetGroupCommand());
+                new SetGroupCommand()
+            };
+
+            var bot = new Bot(apiProvider, commandList);
             bot.Process();
             await Task.Delay(-1);
         }

@@ -4,7 +4,7 @@ using MessengerBotFramework.Abstractions;
 using MessengerBotFramework.BotFramework.CommandControllers;
 using MessengerBotFramework.Common;
 
-namespace ItmoSchedule.BotCommands
+namespace MessengerBotFramework.Commands
 {
     public class HelpCommand : IBotCommand
     {

@@ -1,14 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using MessengerBotFramework.Abstractions;
+using MessengerBotFramework.Commands;
 using MessengerBotFramework.Common;
 
 namespace MessengerBotFramework.BotFramework.CommandControllers
 {
-    public class CommandsList
+    public class CommandsList : IEnumerable
     {
         public readonly Dictionary<string, IBotCommand> Commands = new Dictionary<string, IBotCommand>();
 
-        public void AddCommand(IBotCommand command)
+        public CommandsList()
+        {
+            Add(new HelpCommand(this));
+        }
+
+        public void Add(IBotCommand command)
         {
             Commands.TryAdd(command.CommandName, command);
         }
@@ -19,5 +26,7 @@ namespace MessengerBotFramework.BotFramework.CommandControllers
                 ? new Result<IBotCommand>(true, command)
                 : new Result<IBotCommand>(false, $"command {commandName} not founded", null);
         }
+
+        public IEnumerator GetEnumerator() => Commands.GetEnumerator();
     }
 }

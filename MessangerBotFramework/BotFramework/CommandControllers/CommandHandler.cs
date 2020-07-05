@@ -31,11 +31,6 @@ namespace MessengerBotFramework.BotFramework.CommandControllers
             return new Result(false, loggerMessage);
         }
 
-        public void RegisterCommand(IBotCommand command)
-        {
-            _commands.AddCommand(command);
-        }
-
         public Result ExecuteCommand(CommandArgumentContainer args)
         {
             Result<IBotCommand> commandTask = _commands.GetCommand(args.CommandName);
@@ -47,11 +42,6 @@ namespace MessengerBotFramework.BotFramework.CommandControllers
             var commandExecuteResult = command.Execute(args);
 
             return commandExecuteResult;
-        }
-
-        public CommandsList GetCommands()
-        {
-            return _commands;
         }
     }
 }

@@ -12,13 +12,11 @@ namespace MessengerBotFramework.BotFramework
         private readonly IBotApiProvider _botProvider;
         private readonly char _prefix = '!';
 
-        public Bot(IBotApiProvider botProvider, params IBotCommand[] commands)
+        public Bot(IBotApiProvider botProvider, CommandsList commandsList)
         {
             _botProvider = botProvider;
 
-            _commandHandler = new CommandHandler(new CommandsList());
-            foreach (IBotCommand command in commands) 
-                _commandHandler.RegisterCommand(command);
+            _commandHandler = new CommandHandler(commandsList);
         }
 
         public void Process()

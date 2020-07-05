@@ -23,7 +23,7 @@ namespace ItmoSchedule.Tests
         [Test]
         public void RegisterCommand_Correctly()
         {
-            _commands.AddCommand(_fakeCommand);
+            _commands.Add(_fakeCommand);
             _commands.GetCommand("someCommand").IsSuccess.Should().Be(true);
             _commands.GetCommand("someCommand").Value.Should().Be(_fakeCommand);
         }
@@ -31,8 +31,8 @@ namespace ItmoSchedule.Tests
         [Test]
         public void RegisterCommand_ShouldIgnoreSameCommands()
         {
-            _commands.AddCommand(_fakeCommand);
-            _commands.AddCommand(_fakeCommand);
+            _commands.Add(_fakeCommand);
+            _commands.Add(_fakeCommand);
 
             _commands.GetCommand("someCommand").IsSuccess.Should().Be(true);
             _commands.GetCommand("someCommand").Value.Should().Be(_fakeCommand);
@@ -46,10 +46,10 @@ namespace ItmoSchedule.Tests
             A.CallTo(() => _fakeCommand.CommandName).Returns("someCommand3").Once();
             A.CallTo(() => _fakeCommand.CommandName).Returns("someCommand4").Once();
 
-            _commands.AddCommand(_fakeCommand);
-            _commands.AddCommand(_fakeCommand);
-            _commands.AddCommand(_fakeCommand);
-            _commands.AddCommand(_fakeCommand);
+            _commands.Add(_fakeCommand);
+            _commands.Add(_fakeCommand);
+            _commands.Add(_fakeCommand);
+            _commands.Add(_fakeCommand);
 
             _commands.GetCommand("someCommand3").IsSuccess.Should().Be(true);
             _commands.GetCommand("someCommand3").Value.Should().Be(_fakeCommand);
