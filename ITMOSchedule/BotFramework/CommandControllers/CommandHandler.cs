@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using ItmoSchedule.Abstractions;
 using ItmoSchedule.Common;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace ItmoSchedule.BotFramework.CommandControllers
 {

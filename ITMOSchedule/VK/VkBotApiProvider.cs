@@ -8,6 +8,7 @@ using ItmoSchedule.Tools.Extensions;
 using ItmoSchedule.Tools.Loggers;
 using Newtonsoft.Json.Linq;
 using Serilog;
+using Serilog.Core;
 using VkApi.Wrapper;
 using VkApi.Wrapper.Auth;
 using VkApi.Wrapper.LongPolling.Bot;
@@ -22,7 +23,7 @@ namespace ItmoSchedule.VK
         private Vkontakte _vkApi;
         private BotLongPollClient _client;
         private readonly VkSettings _settings;
-        private readonly Serilog.Core.Logger _vkFileLogger;
+        private readonly Logger _vkFileLogger;
 
         public VkBotApiProvider(VkSettings settings)
         {
@@ -51,7 +52,7 @@ namespace ItmoSchedule.VK
         public Result Initialize()
         {
             var accessToken = AccessToken.FromString(_settings.Key);
-            _vkApi = new Vkontakte(_settings.AppId, _settings.AppSecret) { AccessToken = accessToken };
+            _vkApi = new Vkontakte(_settings.AppId, new VkLibraryLogger(_vkFileLogger), _settings.AppSecret) { AccessToken = accessToken };
             Task<GroupsLongPollServer> getSettingsTask = _vkApi.Groups.GetLongPollServer(_settings.GroupId);
 
             getSettingsTask.WaitSafe();
@@ -92,12 +93,12 @@ namespace ItmoSchedule.VK
         private void Client_OnResponse(object sender, JArray e)
         {
             _vkFileLogger.Debug("New response event: {@e}", e);
-            Logger.Info($"Response: {string.Join(' ',e.ToArray().Select(x=>x.ToString()))}");
+            LoggerHolder.Log.Information($"Response: {string.Join(' ',e.ToArray().Select(x=>x.ToString()))}");
         }
 
         private void Client_OnFail(object sender, int e)
         {
-            Logger.Error($"VkBotApiProvider_Client_OnFail with {e}");
+            LoggerHolder.Log.Error($"VkBotApiProvider_Client_OnFail with {e}");
 
             var settings = _vkApi.Groups.GetLongPollServer(_settings.GroupId).Result;
             var client = _vkApi.StartBotLongPollClient

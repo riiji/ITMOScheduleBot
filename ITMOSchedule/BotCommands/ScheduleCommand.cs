@@ -92,7 +92,7 @@ namespace ItmoSchedule.BotCommands
                         return new Result(false,
                             $"dateTime {args.Arguments.Last()} from {args.Sender.GroupId} is invalid");
 
-                    Logger.Message(date.ToShortDateString());
+                    LoggerHolder.Log.Information(date.ToShortDateString());
                     return new Result(true);
                 }
 

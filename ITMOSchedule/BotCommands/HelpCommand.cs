@@ -3,7 +3,6 @@ using System.Linq;
 using ItmoSchedule.Abstractions;
 using ItmoSchedule.BotFramework.CommandControllers;
 using ItmoSchedule.Common;
-using NLog.LayoutRenderers.Wrappers;
 
 namespace ItmoSchedule.BotCommands
 {
