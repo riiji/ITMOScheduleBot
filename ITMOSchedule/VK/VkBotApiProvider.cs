@@ -7,6 +7,7 @@ using ItmoSchedule.Common;
 using ItmoSchedule.Tools.Extensions;
 using ItmoSchedule.Tools.Loggers;
 using Newtonsoft.Json.Linq;
+using Serilog;
 using VkApi.Wrapper;
 using VkApi.Wrapper.Auth;
 using VkApi.Wrapper.LongPolling.Bot;
@@ -16,27 +17,23 @@ namespace ItmoSchedule.VK
 {
     public class VkBotApiProvider : IBotApiProvider, IDisposable
     {
+        public event EventHandler<BotEventArgs> OnMessage;
+
         private Vkontakte _vkApi;
         private BotLongPollClient _client;
         private readonly VkSettings _settings;
+        private readonly Serilog.Core.Logger _vkFileLogger;
 
         public VkBotApiProvider(VkSettings settings)
         {
             _settings = settings;
+            _vkFileLogger = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .WriteTo.File("vk-api.txt")
+                .CreateLogger();
         }
 
-        public event EventHandler<BotEventArgs> OnMessage;
-
-        private void Client_OnMessageNew(object sender, MessagesMessage e)
-        {
-            OnMessage?.Invoke(sender, new BotEventArgs(e.Text, e.PeerId,e.FromId));
-        }
-
-        public void Dispose()
-        {
-            _client.OnMessageNew -= Client_OnMessageNew;
-            _client.LongPollFailureReceived -= Client_OnFail;
-        }
+        
         public Result WriteMessage(SenderData sender, string message)
         {
             var sendMessageTask = _vkApi.Messages.Send(
@@ -86,12 +83,19 @@ namespace ItmoSchedule.VK
             return new Result(true, "Auth successfully");
         }
 
-        private void Client_OnResponse(object? sender, JArray e)
+        private void Client_OnMessageNew(object sender, MessagesMessage e)
         {
+            _vkFileLogger.Debug("New message event: {@e}", e);
+            OnMessage?.Invoke(sender, new BotEventArgs(e.Text, e.PeerId, e.FromId));
+        }
+
+        private void Client_OnResponse(object sender, JArray e)
+        {
+            _vkFileLogger.Debug("New response event: {@e}", e);
             Logger.Info($"Response: {string.Join(' ',e.ToArray().Select(x=>x.ToString()))}");
         }
 
-        private void Client_OnFail(object? sender, int e)
+        private void Client_OnFail(object sender, int e)
         {
             Logger.Error($"VkBotApiProvider_Client_OnFail with {e}");
 
@@ -109,6 +113,11 @@ namespace ItmoSchedule.VK
             _client.ResponseReceived += Client_OnResponse;
         }
 
-
+        public void Dispose()
+        {
+            _client.OnMessageNew -= Client_OnMessageNew;
+            _client.LongPollFailureReceived -= Client_OnFail;
+            _vkApi.Dispose();
+        }
     }
 }
