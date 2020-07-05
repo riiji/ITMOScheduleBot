@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
-using ItmoSchedule.Tools.Extensions;
+using MessengerBotFramework.Tools.Extensions;
 using NUnit.Framework;
 
 namespace ItmoSchedule.Tests

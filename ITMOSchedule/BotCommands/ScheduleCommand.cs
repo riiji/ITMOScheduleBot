@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ItmoSchedule.Abstractions;
-using ItmoSchedule.Common;
 using ItmoSchedule.Database;
-using ItmoSchedule.Tools.Extensions;
-using ItmoSchedule.Tools.Loggers;
 using ItmoScheduleApiWrapper;
 using ItmoScheduleApiWrapper.Helpers;
 using ItmoScheduleApiWrapper.Models;
+using MessengerBotFramework.Abstractions;
+using MessengerBotFramework.Common;
+using MessengerBotFramework.Tools;
+using MessengerBotFramework.Tools.Extensions;
 
 namespace ItmoSchedule.BotCommands
 {

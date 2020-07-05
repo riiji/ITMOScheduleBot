@@ -1,7 +1,7 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
 using ItmoSchedule.BotCommands;
-using ItmoSchedule.Common;
+using MessengerBotFramework.Common;
 using NUnit.Framework;
 
 namespace ItmoSchedule.Tests.Commands_Should

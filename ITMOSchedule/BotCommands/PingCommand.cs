@@ -1,5 +1,5 @@
-﻿using ItmoSchedule.Abstractions;
-using ItmoSchedule.Common;
+﻿using MessengerBotFramework.Abstractions;
+using MessengerBotFramework.Common;
 
 namespace ItmoSchedule.BotCommands
 {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using ItmoSchedule.Abstractions;
-using ItmoSchedule.Common;
 using ItmoSchedule.Database;
 using ItmoSchedule.Database.Models;
+using MessengerBotFramework.Abstractions;
+using MessengerBotFramework.Common;
 
 namespace ItmoSchedule.BotCommands
 {
