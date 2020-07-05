@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ItmoSchedule.Common
+namespace MessengerBotFramework.Common
 {
     public class Result<T> : Result
     {

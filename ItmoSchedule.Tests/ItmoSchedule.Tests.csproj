@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ITMOSchedule\ItmoSchedule.csproj" />
+    <ProjectReference Include="..\MessangerBotFramework\MessengerBotFramework.csproj" />
   </ItemGroup>
 
 </Project>

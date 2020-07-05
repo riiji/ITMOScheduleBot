@@ -1,6 +1,6 @@
-﻿using ItmoSchedule.Common;
+﻿using MessengerBotFramework.Common;
 
-namespace ItmoSchedule.Abstractions
+namespace MessengerBotFramework.Abstractions
 {
     public interface IBotCommand
     {

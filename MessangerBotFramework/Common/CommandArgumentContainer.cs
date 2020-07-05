@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ItmoSchedule.Common
+namespace MessengerBotFramework.Common
 {
     public class CommandArgumentContainer
     {

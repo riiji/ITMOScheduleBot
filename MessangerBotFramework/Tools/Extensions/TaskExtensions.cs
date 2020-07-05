@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace ItmoSchedule.Tools.Extensions
+namespace MessengerBotFramework.Tools.Extensions
 {
-    public static class ItmoScheduleBotExtensions
+    public static class TaskExtensions
     {
         public static void WaitSafe(this Task task)
         {

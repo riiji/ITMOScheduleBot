@@ -1,7 +1,7 @@
 ﻿using Serilog;
 using Serilog.Core;
 
-namespace ItmoSchedule.Tools.Loggers
+namespace MessengerBotFramework.Tools
 {
     public static class LoggerHolder
     {

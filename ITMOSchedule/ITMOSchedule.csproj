@@ -38,4 +38,8 @@
     <Folder Include="Telegram\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MessangerBotFramework\MessengerBotFramework.csproj" />
+  </ItemGroup>
+
 </Project>

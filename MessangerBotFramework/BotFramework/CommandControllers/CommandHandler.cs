@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using ItmoSchedule.Abstractions;
-using ItmoSchedule.Common;
+using MessengerBotFramework.Abstractions;
+using MessengerBotFramework.Common;
 
-namespace ItmoSchedule.BotFramework.CommandControllers
+namespace MessengerBotFramework.BotFramework.CommandControllers
 {
     public class CommandHandler
     {
