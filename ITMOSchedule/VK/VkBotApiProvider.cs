@@ -118,6 +118,7 @@ namespace ItmoSchedule.VK
         {
             _client.OnMessageNew -= Client_OnMessageNew;
             _client.LongPollFailureReceived -= Client_OnFail;
+            _client.ResponseReceived -= Client_OnResponse;
             _vkApi.Dispose();
         }
     }
